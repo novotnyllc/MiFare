@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22609.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareRT", "src\MiFareRT\MiFareRT.csproj", "{CB81E95C-C093-4DA7-A1E6-0E993F79352C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9EED52A0-0239-4D3D-961A-C7823743936D}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{CFA327A3-424F-4D21-B52E-6C6E3C7144ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcscSdkSampleApp", "samples\PcScSdkSamplePhoneApp\PcscSdkSampleApp.csproj", "{B651DB87-F096-4F97-A0C1-1AA293EFE435}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Debug|ARM.ActiveCfg = Debug|ARM
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Debug|ARM.Build.0 = Debug|ARM
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Debug|x86.ActiveCfg = Debug|x86
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Debug|x86.Build.0 = Debug|x86
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Release|ARM.ActiveCfg = Release|ARM
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Release|ARM.Build.0 = Release|ARM
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Release|x86.ActiveCfg = Release|x86
+		{CB81E95C-C093-4DA7-A1E6-0E993F79352C}.Release|x86.Build.0 = Release|x86
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|ARM.ActiveCfg = Debug|ARM
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|ARM.Build.0 = Debug|ARM
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|ARM.Deploy.0 = Debug|ARM
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|x86.ActiveCfg = Debug|x86
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|x86.Build.0 = Debug|x86
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Debug|x86.Deploy.0 = Debug|x86
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|ARM.ActiveCfg = Release|ARM
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|ARM.Build.0 = Release|ARM
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|ARM.Deploy.0 = Release|ARM
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.ActiveCfg = Release|x86
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.Build.0 = Release|x86
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B651DB87-F096-4F97-A0C1-1AA293EFE435} = {CFA327A3-424F-4D21-B52E-6C6E3C7144ED}
+	EndGlobalSection
+EndGlobal
