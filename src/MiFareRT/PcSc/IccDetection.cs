@@ -27,6 +27,8 @@ namespace MiFare.PcSc
     /// </summary>
     public class IccDetection
     {
+        private bool initialized;
+
         /// <summary>
         ///     class constructor.
         /// </summary>
@@ -84,9 +86,12 @@ namespace MiFare.PcSc
         {
             try
             {
+                if (initialized)
+                    return;
+
                 var atrBuffer = await SmartCard.GetAnswerToResetAsync();
                 Atr = atrBuffer.ToArray();
-                
+
                 Debug.WriteLine("Status: " + (await SmartCard.GetStatusAsync()) + "ATR [" + atrBuffer.Length + "] = " + BitConverter.ToString(Atr));
 
                 AtrInformation = AtrParser.Parse(Atr);
@@ -95,6 +100,8 @@ namespace MiFare.PcSc
                 {
                     DetectCard();
                 }
+
+                initialized = true;
             }
             catch (Exception e)
             {
