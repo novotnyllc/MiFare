@@ -12,6 +12,7 @@ namespace MiFare.Classic
         private readonly DataBlock[] dataBlocks;
         private readonly int sector;
         private AccessConditions access;
+        private AccessConditions originalAccessConditions;
 
         internal Sector(MiFareCard card, int sector)
         {
@@ -31,9 +32,11 @@ namespace MiFare.Classic
             {
                 if (access == null)
                 {
-                    var data = GetData(GetTrailerBlockIndex())
+                    var data = GetData(TrailerBlockIndex)
                         .Result;
                     access = AccessBits.GetAccessConditions(data);
+                    // Store a copy for determining write key for later
+                    originalAccessConditions = AccessBits.GetAccessConditions(data);
                 }
 
                 return access;
@@ -52,7 +55,7 @@ namespace MiFare.Classic
         {
             get
             {
-                var data = GetData(GetTrailerBlockIndex())
+                var data = GetData(TrailerBlockIndex)
                     .Result;
                 var keyA = new byte[6];
                 Array.Copy(data, 0, keyA, 0, 6);
@@ -63,7 +66,7 @@ namespace MiFare.Classic
             {
                 var keyA = value.StringToByteArray();
 
-                var db = GetDataBlockInt(GetTrailerBlockIndex())
+                var db = GetDataBlockInt(TrailerBlockIndex)
                     .Result;
                 Array.Copy(keyA, 0, db.Data, 0, 6);
             }
@@ -76,7 +79,7 @@ namespace MiFare.Classic
         {
             get
             {
-                var data = GetData(GetTrailerBlockIndex())
+                var data = GetData(TrailerBlockIndex)
                     .Result;
                 var keyB = new byte[6];
                 Array.Copy(data, 10, keyB, 0, 6);
@@ -87,7 +90,7 @@ namespace MiFare.Classic
             {
                 var keyB = value.StringToByteArray();
 
-                var db = GetDataBlockInt(GetTrailerBlockIndex())
+                var db = GetDataBlockInt(TrailerBlockIndex)
                     .Result;
                 Array.Copy(keyB, 0, db.Data, 10, 6);
             }
@@ -128,7 +131,7 @@ namespace MiFare.Classic
         /// <remarks>may throw CardLoginException and CardWriteException</remarks>
         public async Task FlushTrailer(string keyA, string keyB)
         {
-            var dataBlock = dataBlocks[GetTrailerBlockIndex()];
+            var dataBlock = dataBlocks[TrailerBlockIndex];
             if (dataBlock == null)
                 return;
 
@@ -139,7 +142,11 @@ namespace MiFare.Classic
             Array.Copy(data, 0, dataBlock.Data, 6, 4);
 
             if (dataBlock.IsChanged)
+            {
                 await FlushDataBlock(dataBlock);
+                // store a new copy of the data
+                originalAccessConditions = AccessBits.GetAccessConditions(dataBlock.Data);
+            }
 
             card.ActiveSector = -1;
         }
@@ -187,8 +194,9 @@ namespace MiFare.Classic
         {
             if (card.ActiveSector != sector)
             {
-                if (!await card.Reader.Login(sector, GetWriteKey(dataBlock.Number)))
-                    throw new CardLoginException($"Unable to login in sector {sector} with key A");
+                var writeKey = GetWriteKey(dataBlock.Number);
+                if (!await card.Reader.Login(sector, writeKey))
+                    throw new CardLoginException($"Unable to login in sector {sector} with key {writeKey}");
 
                 card.ActiveSector = sector;
             }
@@ -207,31 +215,34 @@ namespace MiFare.Classic
             if (card.ActiveSector != sector)
             {
                 if (!await card.Reader.Login(sector, InternalKeyType.KeyA))
-                    throw new CardLoginException($"Unable to login in sector {sector} with key A");
+                {
+                    // In some cases, Key A may not be present, so try logging in with Key B
+                    if (!await card.Reader.Login(sector, InternalKeyType.KeyB))
+                    {
+                        throw new CardLoginException($"Unable to login in sector {sector} with key A or B");
+                    }
+                }
 
 
                 var res = await card.Reader.Read(sector, block);
                 if (!res.Item1)
                     throw new CardReadException($"Unable to read from sector {sector}, block {block}");
 
-                db = new DataBlock(block, res.Item2, (block == GetTrailerBlockIndex()));
+                db = new DataBlock(block, res.Item2, (block == TrailerBlockIndex));
                 dataBlocks[block] = db;
             }
 
             return db;
         }
 
-        private int GetTrailerBlockIndex()
-        {
-            return NumDataBlocks - 1;
-        }
+        private int TrailerBlockIndex => NumDataBlocks - 1;
 
         private InternalKeyType GetTrailerWriteKey()
         {
             if (Access == null)
                 return InternalKeyType.KeyDefaultF;
 
-            return (Access.Trailer.AccessBitsWrite == TrailerAccessCondition.ConditionEnum.KeyA) ? InternalKeyType.KeyA : InternalKeyType.KeyB;
+            return (originalAccessConditions.Trailer.AccessBitsWrite == TrailerAccessCondition.ConditionEnum.KeyA) ? InternalKeyType.KeyA : InternalKeyType.KeyB;
         }
 
         private InternalKeyType GetWriteKey(int datablock)
@@ -239,10 +250,10 @@ namespace MiFare.Classic
             if (Access == null)
                 return InternalKeyType.KeyDefaultF;
 
-            if (datablock == 3)
+            if (datablock == TrailerBlockIndex)
                 return GetTrailerWriteKey();
 
-            return (Access.DataAreas[Math.Min(datablock, Access.DataAreas.Length - 1)].Write == DataAreaAccessCondition.ConditionEnum.KeyA) ? InternalKeyType.KeyA : InternalKeyType.KeyB;
+            return (originalAccessConditions.DataAreas[Math.Min(datablock, Access.DataAreas.Length - 1)].Write == DataAreaAccessCondition.ConditionEnum.KeyA) ? InternalKeyType.KeyA : InternalKeyType.KeyB;
         }
     }
 }
