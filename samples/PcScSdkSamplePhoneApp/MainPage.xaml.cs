@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.Devices.SmartCards;
-using Windows.Devices.Enumeration;
 using System.Diagnostics;
 using System.Text;
+using MiFare;
 using MiFare.Classic;
 using MiFare.PcSc;
 
@@ -34,7 +34,7 @@ namespace PcscSdkSample
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private SmartCardReader CardReader = null;
+        private SmartCardReader Reader;
         private MiFareCard card;
 
         /// <summary>
@@ -97,22 +97,15 @@ namespace PcscSdkSample
         {
             try
             {
-                DeviceInformationCollection devices = await DeviceInformation.FindAllAsync(SmartCardReader.GetDeviceSelector(SmartCardReaderKind.Nfc));
-
-                // There is a bug on some devices that were updated to WP8.1 where an NFC SmartCardReader is
-                // enumerated despite that the device does not support it. As a workaround, we can do an additonal check
-                // to ensure the device truly does support it.
-                var workaroundDetect = await DeviceInformation.FindAllAsync("System.Devices.InterfaceClassGuid:=\"{50DD5230-BA8A-11D1-BF5D-0000F805F530}\" AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True");
-
-                if (workaroundDetect.Count == 0 || devices.Count == 0)
+                Reader = await CardReader.Find();
+                if (Reader == null)
                 {
-                    PopupMessage("No Reader Found!");
+                    PopupMessage("No Readers Found");
+                    return;
                 }
 
-                CardReader = await SmartCardReader.FromIdAsync(devices.First().Id);
-
-                CardReader.CardAdded += CardAdded;
-                CardReader.CardRemoved += CardRemoved;
+                Reader.CardAdded += CardAdded;
+                Reader.CardRemoved += CardRemoved;
             }
             catch (Exception e)
             {

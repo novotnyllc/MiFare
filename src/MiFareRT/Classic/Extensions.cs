@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.SmartCards;
+using MiFare.PcSc.MiFareStandard;
 
 namespace MiFare.Classic
 {
@@ -31,7 +32,7 @@ namespace MiFare.Classic
         }
 
         /// <summary>
-        ///     Creates a MiFare card instance using the factory default key
+        ///     Creates a MiFare card instance using the factory default key for all sectors
         /// </summary>
         /// <param name="card"></param>
         /// <returns></returns>
@@ -39,9 +40,18 @@ namespace MiFare.Classic
         {
             if (card == null) throw new ArgumentNullException(nameof(card));
 
-            return CreateMiFareCard(card, null);
-        }
+            var keys = from sector in Enumerable.Range(0, 40)
+                       select new SectorKeySet
+                       {
+                           Sector =  sector,
+                           KeyType = KeyType.KeyA,
+                           Key = Defaults.KeyA
+                       };
 
+
+            return CreateMiFareCard(card, keys.ToList());
+        }
+        
         public static bool IsEqual(this BitArray value, BitArray ba)
         {
             if (value.Length != ba.Length)

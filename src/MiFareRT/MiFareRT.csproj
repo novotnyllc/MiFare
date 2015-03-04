@@ -82,6 +82,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardReader.cs" />
     <Compile Include="Classic\AccessBits.cs" />
     <Compile Include="Classic\AccessConditions.cs" />
     <Compile Include="Classic\DataAreaAccessCondition.cs" />
