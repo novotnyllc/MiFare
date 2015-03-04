@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareRT", "src\MiFareRT\Mi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9EED52A0-0239-4D3D-961A-C7823743936D}"
 	ProjectSection(SolutionItems) = preProject
+		MiFareRT.nuspec = MiFareRT.nuspec
 		readme.md = readme.md
 	EndProjectSection
 EndProject
