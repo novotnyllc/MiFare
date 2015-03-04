@@ -11,7 +11,7 @@
     <tags>mifare classic nfc pcsc</tags>
     <language>en-US</language>
     <projectUrl>https://github.com/onovotny/MiFareRT</projectUrl>
-    <licenseUrl>https://raw.githubusercontent.com/onovotny/MiFareRT/master/license.txt</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/onovotny/MiFareRT/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 
   </metadata>
