@@ -46,7 +46,12 @@ namespace MiFare.Classic
         /// </summary>
         /// <returns></returns>
         Task<IccDetection> GetCardInfo();
-        
+
+        /// <summary>
+        /// Add or Update a key for a sector
+        /// </summary>
+        /// <param name="keySet"></param>
+        void AddOrUpdateSectorKeySet(SectorKeySet keySet);
 
         /// <summary>
         /// Login into the given sector using the given key

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using MiFare.PcSc;
 using System.Text;
@@ -16,23 +18,37 @@ namespace MiFare.Classic
     {
         private static readonly byte[] DefaultKey = Defaults.KeyA;
         private SmartCardConnection connection;
-        private readonly InternalKeyType keyType;
         private readonly SmartCard smartCard;
-        private readonly byte[] secKey;
+
 
         private Task initialization;
         private readonly object connectionLock = new object();
 
-        public MifareStandardCardReader(SmartCard smartCard, byte[] secKey, InternalKeyType keyType)
+        private Dictionary<SectorKey, byte[]> keyMap = new Dictionary<SectorKey, byte[]>();
+
+        public MifareStandardCardReader(SmartCard smartCard, IReadOnlyCollection<SectorKeySet> keys)
         {
-            if (secKey.Length != 6)
-                throw new ArgumentOutOfRangeException(nameof(secKey), "key length must be 6 bytes");
-            
+            if (!keys.All(set => set.IsValid))
+            {
+                var key = keys.First(k => !k.IsValid);
+                throw new ArgumentException($"KeySet with Sector {key.Sector}, KeyType {key.KeyType} is invalid", nameof(keys));
+            }
+
+
+            PopulateKeyMap(keys);
+
             this.smartCard = smartCard;
-            this.secKey = secKey;
-            this.keyType = keyType;
             this.initialization = Initialize();
         }
+
+        private void PopulateKeyMap(IEnumerable<SectorKeySet> keys)
+        {
+            foreach (var keySet in keys)
+            {
+                keyMap.Add(new SectorKey(keySet.Sector, (InternalKeyType)keySet.KeyType), keySet.Key);
+            }
+        }
+
 
         private async Task Initialize()
         {
@@ -53,13 +69,25 @@ namespace MiFare.Classic
 
             return cardIdentification;
         }
-        
+
+        public void AddOrUpdateSectorKeySet(SectorKeySet keySet)
+        {
+            if (keySet == null) throw new ArgumentNullException(nameof(keySet));
+            if (!keySet.IsValid)
+            {
+                throw new ArgumentException($"KeySet with Sector {keySet.Sector}, KeyType {keySet.KeyType} is invalid", nameof(keySet));
+            }
+
+            // Add or update the sector key in the map
+            keyMap[new SectorKey(keySet.Sector, (InternalKeyType)keySet.KeyType)] = keySet.Key;
+        }
+
         public async Task<bool> Login(int sector, InternalKeyType key)
         {
             await initialization;
 
-            var keyTypeToUse = keyType;
-            var keyToUse = secKey;
+            var keyTypeToUse = key;
+            byte[] keyToUse;
 
             if (key == InternalKeyType.KeyDefaultF)
             {
@@ -67,12 +95,21 @@ namespace MiFare.Classic
                 keyToUse = DefaultKey;
                 keyTypeToUse = InternalKeyType.KeyA;
             }
+            else
+            {
+                //try to find the right key for the sector
+                if (!keyMap.TryGetValue(new SectorKey(sector, key), out keyToUse))
+                {
+                    return false; // No provided key type for the sector
+                }
+            }
 
-            // Otherwise, use the one we specified
             var gaKeyType = (GeneralAuthenticate.GeneralAuthenticateKeyType)keyTypeToUse;
 
+            // Get the first block for the sector
             var blockNumber = SectorToBlock(sector, 0);
 
+            // Load the key and try to authenticate to it
             await connection.TransceiveAsync(new LoadKey(keyToUse, 0));
             var res = await connection.TransceiveAsync(new MFGA(blockNumber, 0, gaKeyType));
 
@@ -160,5 +197,56 @@ namespace MiFare.Classic
                 connection = null;
             }
         }
+    }
+
+    [DebuggerDisplay("Sector: {Sector}, KeyType: {KeyType}")]
+    public class SectorKeySet
+    {
+        public int Sector { get; set; }
+        public KeyType KeyType { get; set; }
+        public byte[] Key { get; set; }
+
+        public bool IsValid => Sector >= 0 && Sector < 40 && Key != null && Key.Length == 6;
+    }
+
+
+    internal struct SectorKey : IEquatable<SectorKey>
+    {
+        public SectorKey(int sector, InternalKeyType keyType)
+        {
+            Sector = sector;
+            KeyType = keyType;
+        }
+        public bool Equals(SectorKey other)
+        {
+            return Sector == other.Sector && KeyType == other.KeyType;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is SectorKey && Equals((SectorKey)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Sector*397) ^ (int)KeyType;
+            }
+        }
+
+        public static bool operator ==(SectorKey left, SectorKey right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(SectorKey left, SectorKey right)
+        {
+            return !left.Equals(right);
+        }
+
+        public int Sector { get; }
+        public InternalKeyType KeyType { get; }
     }
 }

@@ -173,6 +173,21 @@ namespace MiFare.Classic
         }
 
         /// <summary>
+        /// Add or Update a key for a sector
+        /// </summary>
+        /// <param name="keySet"></param>
+        public void AddOrUpdateSectorKeySet(SectorKeySet keySet)
+        {
+            if (keySet == null) throw new ArgumentNullException(nameof(keySet));
+            if (!keySet.IsValid)
+            {
+                throw new ArgumentException($"KeySet with Sector {keySet.Sector}, KeyType {keySet.KeyType} is invalid", nameof(keySet));
+            }
+
+            Reader.AddOrUpdateSectorKeySet(keySet);
+        }
+
+        /// <summary>
         ///     Wrapper method get the Mifare Standard ICC UID
         /// </summary>
         /// <returns>byte array UID</returns>

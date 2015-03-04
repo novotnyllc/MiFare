@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.SmartCards;
-using MiFare.PcSc.MiFareStandard;
 
 namespace MiFare.Classic
 {
@@ -15,17 +15,19 @@ namespace MiFare.Classic
         ///     Creates a MiFare card instance using the specified key
         /// </summary>
         /// <param name="card"></param>
-        /// <param name="key">6 byte key</param>
-        /// <param name="keyType">Key A or Key B</param>
+        /// <param name="keys"></param>
         /// <returns></returns>
-        public static MiFareCard CreateMiFareCard(this SmartCard card, byte[] key, KeyType keyType)
+        public static MiFareCard CreateMiFareCard(this SmartCard card, IList<SectorKeySet> keys)
         {
             if (card == null) throw new ArgumentNullException(nameof(card));
-            if (key == null) throw new ArgumentNullException(nameof(key));
-            if (key.Length != 6) throw new ArgumentException("Key length must be 6 bytes", nameof(key));
+            if (keys == null) keys = new List<SectorKeySet>();
+            if (!keys.All(set => set.IsValid))
+            {
+                var key = keys.First(k => !k.IsValid);
+                throw new ArgumentException($"KeySet with Sector {key.Sector}, KeyType {key.KeyType} is invalid", nameof(keys));
+            }
 
-
-            return new MiFareCard(new MifareStandardCardReader(card, key, (InternalKeyType)keyType));
+            return new MiFareCard(new MifareStandardCardReader(card, new ReadOnlyCollection<SectorKeySet>(keys)));
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace MiFare.Classic
         {
             if (card == null) throw new ArgumentNullException(nameof(card));
 
-            return CreateMiFareCard(card, Defaults.KeyA, KeyType.KeyA);
+            return CreateMiFareCard(card, null);
         }
 
         public static bool IsEqual(this BitArray value, BitArray ba)
