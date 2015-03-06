@@ -6,7 +6,7 @@
     <SharedGUID>7160bf6d-2939-4496-8bb2-be2e729d3af8</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>MiFare.Shared</Import_RootNamespace>
+    <Import_RootNamespace>MiFare</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Classic\AccessBits.cs" />
@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Classic\MAD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\MAD2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFARECard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFareStandardCardReaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\Sector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\TrailerAccessCondition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\TrailerDataBlock.cs" />
