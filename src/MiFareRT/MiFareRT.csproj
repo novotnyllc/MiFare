@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardReader.cs" />
+    <Compile Include="Classic\FactoryMethods.cs" />
     <Compile Include="Classic\MifareStandardCardReader.cs" />
     <Compile Include="PcSc\PcscUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
