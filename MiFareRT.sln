@@ -17,10 +17,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PcscSdkSampleApp", "samples
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MiFare.Shared", "src\MiFare.Shared\MiFare.Shared.shproj", "{7160BF6D-2939-4496-8BB2-BE2E729D3AF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFare.Desktop", "src\MiFare.Desktop\MiFare.Desktop.csproj", "{6939008F-7403-484C-82B2-799ACAF3417C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\MiFare.Shared\MiFare.Shared.projitems*{7160bf6d-2939-4496-8bb2-be2e729d3af8}*SharedItemsImports = 13
 		src\MiFare.Shared\MiFare.Shared.projitems*{cb81e95c-c093-4da7-a1e6-0e993f79352c}*SharedItemsImports = 4
+		src\MiFare.Shared\MiFare.Shared.projitems*{6939008f-7403-484c-82b2-799acaf3417c}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +64,18 @@ Global
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.ActiveCfg = Release|x86
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.Build.0 = Release|x86
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.Deploy.0 = Release|x86
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Debug|x86.Build.0 = Debug|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Release|ARM.Build.0 = Release|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Release|x86.ActiveCfg = Release|Any CPU
+		{6939008F-7403-484C-82B2-799ACAF3417C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
