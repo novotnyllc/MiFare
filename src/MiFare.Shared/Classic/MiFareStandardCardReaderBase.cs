@@ -47,7 +47,7 @@ namespace MiFare.Classic
         public async Task<IccDetection> GetCardInfo()
         {
             var atrbytes = await GetAnswerToResetAsync();
-            var cardIdentification = new IccDetection(atrbytes.ToArray());
+            var cardIdentification = new IccDetection(atrbytes);
 
             return cardIdentification;
         }

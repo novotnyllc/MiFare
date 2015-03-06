@@ -17,8 +17,8 @@ using System.Linq;
 namespace MiFare.PcSc
 {
     /// <summary>
-    ///     Class used to detect the type of the ICC card detected. It accept a connection object
-    ///     and gets the ATR from the ICC. After the ATR is parsed, the ICC Detection class inspects
+    ///     Class used to detect the type of the ICC card detected. It accept ATR bytes. 
+    ///     After the ATR is parsed, the ICC Detection class inspects
     ///     the historical bytes in order to detect the ICC type as specified by PCSC specification.
     /// </summary>
     public class IccDetection
@@ -26,8 +26,8 @@ namespace MiFare.PcSc
         /// <summary>
         ///     class constructor.
         /// </summary>
-        /// <param name="card">
-        ///     smart card object
+        /// <param name="atrBytes">
+        ///     Bytes from a STR request
         /// </param>
         public IccDetection(byte[] atrBytes)
         {
