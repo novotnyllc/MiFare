@@ -10,11 +10,7 @@
 */
 
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
+using System.IO;
 
 namespace MiFare.PcSc
 {
@@ -60,7 +56,7 @@ namespace MiFare.PcSc
         /// <summary>
         ///     Historical bytes if present
         /// </summary>
-        public IBuffer HistoricalBytes { set; get; }
+        public byte[] HistoricalBytes { set; get; }
 
         /// <summary>
         ///     Check Byte valid
@@ -81,10 +77,13 @@ namespace MiFare.PcSc
         /// </returns>
         public static AtrInfo Parse(byte[] atrBytes)
         {
+            if (atrBytes == null || atrBytes.Length < 1)
+                return null;
+
             var atrInfo = new AtrInfo();
             var supportedProtocols = 0;
 
-            using (var reader = DataReader.FromBuffer(atrBytes.AsBuffer()))
+            using (var reader = new BinaryReader(new MemoryStream(atrBytes)))
             {
                 var initialChar = reader.ReadByte();
 
@@ -116,7 +115,9 @@ namespace MiFare.PcSc
                     supportedProtocols |= (1 << interfacePresence.LowNibble());
                 }
 
-                atrInfo.HistoricalBytes = reader.ReadBuffer(formatByte.LowNibble());
+                var buffer = new byte[formatByte.LowNibble()];
+                reader.Read(buffer, 0, buffer.Length);
+                atrInfo.HistoricalBytes = buffer;
 
                 if ((supportedProtocols & ~1) != 0)
                 {

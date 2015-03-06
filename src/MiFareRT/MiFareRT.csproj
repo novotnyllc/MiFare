@@ -86,34 +86,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardReader.cs" />
-    <Compile Include="Classic\AccessBits.cs" />
-    <Compile Include="Classic\AccessConditions.cs" />
-    <Compile Include="Classic\DataAreaAccessCondition.cs" />
-    <Compile Include="Classic\DataBlock.cs" />
-    <Compile Include="Classic\CardLoginException.cs" />
-    <Compile Include="Classic\CardReadException.cs" />
-    <Compile Include="Classic\CardWriteException.cs" />
-    <Compile Include="Classic\Extensions.cs" />
-    <Compile Include="Classic\ICardReader.cs" />
-    <Compile Include="Classic\MAD.cs" />
-    <Compile Include="Classic\MAD2.cs" />
-    <Compile Include="Classic\MiFARECard.cs" />
-    <Compile Include="Classic\Sector.cs" />
-    <Compile Include="Classic\TrailerAccessCondition.cs" />
-    <Compile Include="Classic\TrailerDataBlock.cs" />
-    <Compile Include="PcSc\AtrParser.cs" />
-    <Compile Include="PcSc\CommonDefs.cs" />
-    <Compile Include="PcSc\IccDetection.cs" />
-    <Compile Include="PcSc\Iso7816.cs" />
-    <Compile Include="PcSc\Iso7816Defs.cs" />
     <Compile Include="Classic\MifareStandardCardReader.cs" />
-    <Compile Include="PcSc\MifareStandardCommands.cs" />
-    <Compile Include="PcSc\MifareStandardDefaults.cs" />
-    <Compile Include="PcSc\Pcsc.cs" />
-    <Compile Include="PcSc\PcscDefs.cs" />
     <Compile Include="PcSc\PcscUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <Import Project="..\MiFare.Shared\MiFare.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

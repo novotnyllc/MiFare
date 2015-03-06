@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using MiFare.PcSc;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,8 +65,8 @@ namespace MiFare.Classic
         {
             await initialization;
 
-            var cardIdentification = new IccDetection(smartCard, connection);
-            await cardIdentification.DetectCardTypeAync();
+            var atrbytes = await smartCard.GetAnswerToResetAsync();
+            var cardIdentification = new IccDetection(atrbytes.ToArray());
 
             return cardIdentification;
         }

@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.SmartCards;
 using MiFare.PcSc.Iso7816;
@@ -35,9 +36,9 @@ namespace MiFare.PcSc
         {
             var apduRes = (Iso7816.ApduResponse)Activator.CreateInstance(apduCommand.ApduResponseType);
 
-            var responseBuf = await connection.TransmitAsync(apduCommand.GetBuffer());
+            var responseBuf = await connection.TransmitAsync(apduCommand.GetBuffer().AsBuffer());
 
-            apduRes.ExtractResponse(responseBuf);
+            apduRes.ExtractResponse(responseBuf.ToArray());
 
             return apduRes;
         }

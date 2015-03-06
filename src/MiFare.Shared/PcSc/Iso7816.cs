@@ -10,10 +10,7 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
+using System.IO;
 
 namespace MiFare.PcSc.Iso7816
 {
@@ -72,28 +69,29 @@ namespace MiFare.PcSc.Iso7816
         /// <returns>
         /// buffer holds the current wire/air format of the command
         /// </returns>
-        public IBuffer GetBuffer()
+        public byte[] GetBuffer()
         {
-            using (DataWriter writer = new DataWriter())
+            using (var ms = new MemoryStream())
             {
-                writer.WriteByte(CLA);
-                writer.WriteByte(INS);
-                writer.WriteByte(P1);
-                writer.WriteByte(P2);
+                ms.WriteByte(CLA);
+                ms.WriteByte(INS);
+                ms.WriteByte(P1);
+                ms.WriteByte(P2);
 
                 if (CommandData != null && CommandData.Length > 0)
                 {
-                    writer.WriteByte((byte)CommandData.Length);
-                    writer.WriteBytes(CommandData);
+                    ms.WriteByte((byte)CommandData.Length);
+                    ms.Write(CommandData, 0, CommandData.Length);
                 }
 
                 if (Le != null)
                 {
-                    writer.WriteByte((byte)Le);
+                    ms.WriteByte((byte)Le);
                 }
-
-                return writer.DetachBuffer();
+                return ms.ToArray();
             }
+
+           
         }
         /// <summary>
         /// Helper method to print the command in a readable format
@@ -119,18 +117,19 @@ namespace MiFare.PcSc.Iso7816
         /// methode to extract the response data, status and qualifier
         /// </summary>
         /// <param name="response"></param>
-        public virtual void ExtractResponse(IBuffer response)
+        public virtual void ExtractResponse(byte[] response)
         {
             if (response.Length < 2)
             {
                 throw new InvalidOperationException("APDU response must be at least 2 bytes");
             }
-            using (DataReader reader = DataReader.FromBuffer(response))
+            using (var reader = new MemoryStream(response))
             {
                 ResponseData = new byte[response.Length - 2];
-                reader.ReadBytes(ResponseData);
-                SW1 = reader.ReadByte();
-                SW2 = reader.ReadByte();
+                reader.Read(ResponseData, 0, ResponseData.Length);
+                
+                SW1 = (byte)reader.ReadByte();
+                SW2 = (byte)reader.ReadByte();
             }
         }
         /// <summary>
