@@ -23,6 +23,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFARECard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFareStandardCardReaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\Sector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classic\SectorKey.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classic\SectorKeySet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\TrailerAccessCondition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Classic\TrailerDataBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PcSc\AtrParser.cs" />
