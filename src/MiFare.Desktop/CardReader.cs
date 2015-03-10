@@ -11,7 +11,12 @@ namespace MiFare
 {
     public static class CardReader
     {
-        public static SmartCardReader Find(Func<IEnumerable<string>, string> selector = null)
+        public static SmartCardReader Create(string readerName)
+        {
+            return new SmartCardReader(readerName);
+        }
+
+        public static IReadOnlyList<string> GetReaderNames()
         {
             const char nullchar = (char)0;
 
@@ -19,21 +24,27 @@ namespace MiFare
             try
             {
                 var retVal = SafeNativeMethods.SCardEstablishContext(Constants.SCARD_SCOPE_SYSTEM, IntPtr.Zero, IntPtr.Zero, out context);
-                CheckError(retVal);
+                Helpers.CheckError(retVal);
                 uint readerCount = 0;
                 retVal = SafeNativeMethods.SCardListReaders(context, null, null, ref readerCount);
-                CheckError(retVal);
+
+                // First see if we have any readers
+                if (retVal == unchecked((int)0x8010002E)) // SCARD_E_NO_READERS_AVAILABLE
+                    return new List<string>();
+
+                // Otherwise check for an error
+                Helpers.CheckError(retVal);
 
                 var mszReaders = new byte[readerCount];
 
                 // Fill readers buffer with second call.
                 retVal = SafeNativeMethods.SCardListReaders(context, null, mszReaders, ref readerCount);
-                CheckError(retVal);
+                Helpers.CheckError(retVal);
 
                 // Populate List with readers.
                 var currbuff = Encoding.ASCII.GetString(mszReaders);
 
-                
+
                 var len = (int)readerCount;
 
                 var readerList = new List<string>();
@@ -49,15 +60,8 @@ namespace MiFare
                         currbuff = currbuff.Substring(nullindex + 1, len);
                     }
                 }
-
-                // Callback to select which one
-                selector = selector ?? (list => list.First());
-
-                var readerName = selector(readerList);
-
-                return new SmartCardReader(context, readerName);
-                // SafeNativeMethods.SCardListReaders(context,)
-
+                
+                return readerList;
             }
             finally
             {
@@ -66,20 +70,8 @@ namespace MiFare
                     SafeNativeMethods.SCardReleaseContext(context);
                 }
             }
-  
+        } 
 
-
-
-            return null;   
-        }
-
-        private static void CheckError(int errorCode)
-        {
-            if (errorCode != 0)
-            {
-                var hr = Marshal.GetHRForLastWin32Error();
-                Marshal.ThrowExceptionForHR(hr);
-            }
-        }
+       
     }
 }

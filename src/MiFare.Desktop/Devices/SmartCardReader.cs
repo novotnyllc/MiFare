@@ -12,10 +12,12 @@ namespace MiFare.Devices
     {
         private readonly IntPtr context;
 
-        internal SmartCardReader(IntPtr context, string readerName)
+        internal SmartCardReader(string readerName)
         {
-            this.context = context;
             Name = readerName;
+
+            var retVal = SafeNativeMethods.SCardEstablishContext(Constants.SCARD_SCOPE_SYSTEM, IntPtr.Zero, IntPtr.Zero, out context);
+            Helpers.CheckError(retVal);
         }
 
         public void Dispose()
