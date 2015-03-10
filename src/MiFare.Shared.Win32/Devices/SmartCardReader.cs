@@ -70,7 +70,7 @@ namespace MiFare.Devices
 
 
                             var card = new SmartCard(hContext, Name, currentState.ATRValue);
-                            if (Interlocked.CompareExchange(ref currentCard, null, card) != null)
+                            if (Interlocked.CompareExchange(ref currentCard, null, card) == null)
                             {
                                 // card was not inserted, now it is
                                 var evt = CardAdded;
