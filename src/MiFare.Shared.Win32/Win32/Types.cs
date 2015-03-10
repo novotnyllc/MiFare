@@ -9,7 +9,7 @@ namespace MiFare.Win32
     /// <summary>
     /// Reader State
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal struct SCARD_READERSTATE
     {
         public string RdrName;
