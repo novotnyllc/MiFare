@@ -25,8 +25,8 @@ namespace MiFare
             {
                 var retVal = SafeNativeMethods.SCardEstablishContext(Constants.SCARD_SCOPE_SYSTEM, IntPtr.Zero, IntPtr.Zero, out context);
                 Helpers.CheckError(retVal);
-                uint readerCount = 0;
-                retVal = SafeNativeMethods.SCardListReaders(context, null, null, ref readerCount);
+                uint bufferLength = 0;
+                retVal = SafeNativeMethods.SCardListReaders(context, null, null, ref bufferLength);
 
                 // First see if we have any readers
                 if (retVal == unchecked((int)0x8010002E)) // SCARD_E_NO_READERS_AVAILABLE
@@ -35,17 +35,17 @@ namespace MiFare
                 // Otherwise check for an error
                 Helpers.CheckError(retVal);
 
-                var mszReaders = new byte[readerCount];
+                var mszReaders = new byte[bufferLength];
 
                 // Fill readers buffer with second call.
-                retVal = SafeNativeMethods.SCardListReaders(context, null, mszReaders, ref readerCount);
+                retVal = SafeNativeMethods.SCardListReaders(context, null, mszReaders, ref bufferLength);
                 Helpers.CheckError(retVal);
 
                 // Populate List with readers.
-                var currbuff = Encoding.ASCII.GetString(mszReaders);
+                var currbuff = Encoding.UTF8.GetString(mszReaders, 0, mszReaders.Length);
 
 
-                var len = (int)readerCount;
+                var len = (int)bufferLength;
 
                 var readerList = new List<string>();
 

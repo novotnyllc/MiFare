@@ -35,15 +35,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Devices\SmartCardReader.cs" />
-    <Compile Include="Win32\Constants.cs" />
-    <Compile Include="Win32\Helpers.cs" />
-    <Compile Include="Win32\SafeNativeMethods.cs" />
-    <Compile Include="Win32\Types.cs" />
   </ItemGroup>
   <Import Project="..\MiFare.Shared\MiFare.Shared.projitems" Label="Shared" />
+  <Import Project="..\MiFare.Shared.Win32\MiFare.Shared.Win32.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

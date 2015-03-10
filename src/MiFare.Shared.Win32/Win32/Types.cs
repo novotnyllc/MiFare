@@ -9,7 +9,7 @@ namespace MiFare.Win32
     /// <summary>
     /// Reader State
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)] // should this be ansi or unicode? was auto
     internal struct SCARD_READERSTATE
     {
         public string RdrName;
