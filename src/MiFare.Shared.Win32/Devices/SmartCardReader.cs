@@ -17,12 +17,12 @@ namespace MiFare.Devices
         private IntPtr hProtocol;
         private readonly Task monitorTask;
 
-        public event EventHandler CardAdded;
-        public event EventHandler CardRemoved;
+        public event EventHandler<CardEventArgs> CardAdded;
+        public event EventHandler<CardEventArgs> CardRemoved;
+
 
         private volatile bool cardInserted;
-
-        private volatile byte[] atrBytes;
+        private SmartCard currentCard;
       
 
         private CancellationTokenSource monitorTokenSource = new CancellationTokenSource();
@@ -36,58 +36,7 @@ namespace MiFare.Devices
             monitorTask = CardDetectionLoop(monitorTokenSource.Token);   
         }
 
-        private void Connect()
-        {
-            var retVal = SafeNativeMethods.SCardConnect(hContext, Name, Constants.SCARD_SHARE_SHARED, Constants.SCARD_PROTOCOL_T1, ref hCard, ref hProtocol);
-            Helpers.CheckError(retVal);
-        }
-
-        private void Disconnect()
-        {
-            var retVal = SafeNativeMethods.SCardDisconnect(hCard, Constants.SCARD_UNPOWER_CARD);
-
-            hCard = IntPtr.Zero;
-            hProtocol = IntPtr.Zero;
-            Helpers.CheckError(retVal);
-        }
-
-        public byte[] GetAnswerToReset()
-        {
-            var bytes = atrBytes;
-            if(bytes != null)
-                return bytes;
-
-            throw new InvalidOperationException("Must be called while connected and card is in range");
-        }
-
-        public byte[] Tranceive(byte[] buffer)
-        {
-            if (buffer == null) throw new ArgumentNullException("buffer");
-
-            var sioreq = new SCARD_IO_REQUEST
-            {
-                dwProtocol = 0x2,
-                cbPciLength = 8
-            };
-            var rioreq = new SCARD_IO_REQUEST
-            {
-                cbPciLength = 8,
-                dwProtocol = 0x2
-            };
-
-            var receiveBuffer = new byte[256];
-            var rlen = receiveBuffer.Length;
-
-            var retVal = SafeNativeMethods.SCardTransmit(hCard, ref sioreq, buffer, buffer.Length, ref rioreq, receiveBuffer, ref rlen);
-            Helpers.CheckError(retVal);
-
-
-            var retBuf = new byte[rlen];
-            Array.Copy(receiveBuffer, retBuf, rlen);
-
-            return retBuf;
-        }
-
+     
         private async Task CardDetectionLoop(CancellationToken token)
         {
 
@@ -116,14 +65,18 @@ namespace MiFare.Devices
                         if (!cardInserted)
                         {
                             cardInserted = true;
-                            atrBytes = currentState.ATRValue;
 
-                            Connect();
+                            OnDisconnect(); // clean up if needed
 
-                            // card was not inserted, now it is
-                            var evt = CardAdded;
-                            if (evt != null)
-                                evt(this, EventArgs.Empty);
+
+                            var card = new SmartCard(hContext, Name, currentState.ATRValue);
+                            if (Interlocked.CompareExchange(ref currentCard, null, card) != null)
+                            {
+                                // card was not inserted, now it is
+                                var evt = CardAdded;
+                                if (evt != null)
+                                    evt(this, new CardEventArgs(card));
+                            }
                         }
                     }
                     else
@@ -132,12 +85,8 @@ namespace MiFare.Devices
                         if (cardInserted)
                         {
                             cardInserted = false;
-                            atrBytes = null;
 
-                            Disconnect();
-                            var evt = CardRemoved;
-                            if (evt != null)
-                                evt(this, EventArgs.Empty);
+                            OnDisconnect();
                         }
                     }
 
@@ -150,6 +99,17 @@ namespace MiFare.Devices
             }
         }
 
+        private void OnDisconnect()
+        {
+            var oldCard = Interlocked.CompareExchange(ref currentCard, null, currentCard);
+            if (oldCard != null)
+            {
+                oldCard.Dispose();
+                var evt = CardRemoved;
+                if (evt != null)
+                    evt(this, new CardEventArgs(oldCard));
+            }
+        }
 
         public void Dispose()
         {

@@ -10,7 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CardReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classic\FactoryMethods.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFareWin32CardReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\CardEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\SmartCard.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Devices\SmartCardReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PcSc\PcscUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Win32\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Win32\Helpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Win32\SafeNativeMethods.cs" />

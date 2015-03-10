@@ -10,7 +10,7 @@ using ApduResponse = MiFare.PcSc.Iso7816.ApduResponse;
 
 namespace MiFare.Classic
 {
-    internal class MifareStandardCardReader :  MiFareStandardCardReaderBase
+    internal class MiFareWinRTCardReader :  MiFareStandardCardReaderBase
     {
         
         private SmartCardConnection connection;
@@ -20,7 +20,7 @@ namespace MiFare.Classic
         private readonly object connectionLock = new object();
 
 
-        public MifareStandardCardReader(SmartCard smartCard, IReadOnlyCollection<SectorKeySet> keys) : base(keys)
+        public MiFareWinRTCardReader(SmartCard smartCard, IReadOnlyCollection<SectorKeySet> keys) : base(keys)
         {
             this.smartCard = smartCard;
             initialization = Initialize();

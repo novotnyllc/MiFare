@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Windows.Devices.SmartCards;
+using MiFare.Devices;
 using MiFare.PcSc.MiFareStandard;
 
 namespace MiFare.Classic
@@ -25,7 +25,7 @@ namespace MiFare.Classic
                 throw new ArgumentException($"KeySet with Sector {key.Sector}, KeyType {key.KeyType} is invalid", nameof(keys));
             }
 
-            return new MiFareCard(new MiFareWinRTCardReader(card, new ReadOnlyCollection<SectorKeySet>(keys)));
+            return new MiFareCard(new MiFareWin32CardReader(card, new ReadOnlyCollection<SectorKeySet>(keys)));
         }
 
         /// <summary>
