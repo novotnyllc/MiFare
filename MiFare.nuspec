@@ -7,7 +7,7 @@
     <authors>Oren Novotny</authors>
     <owners />
     <description>MiFare Classic card support with WP 8.1, Windows Store and Desktop apps</description>
-    <summary>Read/Write MiFare Classic cards with Windows Phone 8.1. Requires device with NXP547 chip. Lumia 830, 730 and newer.
+    <summary>Read/Write MiFare Classic cards with Windows Phone 8.1. Phone requires device with NXP547 chip. Lumia 830, 730 and newer.
       Windows Store support requires enterprise apps as library will not work in public store.
     </summary>
     <tags>mifare classic nfc pcsc rfid</tags>
