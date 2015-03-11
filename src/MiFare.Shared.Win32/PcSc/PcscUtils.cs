@@ -11,8 +11,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using MiFare.Devices;
 using MiFare.PcSc.Iso7816;
@@ -21,6 +23,9 @@ namespace MiFare.PcSc
 {
     public static class SmartCardConnectionExtension
     {
+        // Hack since second time we connect cards, we need a delay
+        internal static volatile bool IsFirstConnection = true;
+
         /// <summary>
         ///     Extension method to SmartCardConnection class similar to Transmit asyc method, however it accepts PCSC SDK
         ///     commands.
@@ -32,15 +37,21 @@ namespace MiFare.PcSc
         ///     SmartCardConnection object
         /// </param>
         /// <returns>APDU response object of type defined by the APDU command object</returns>
-        public static Task<Iso7816.ApduResponse> TransceiveAsync(this SmartCardConnection connection, ApduCommand apduCommand)
+        public static async Task<Iso7816.ApduResponse> TransceiveAsync(this SmartCardConnection connection, ApduCommand apduCommand)
         {
             var apduRes = (Iso7816.ApduResponse)Activator.CreateInstance(apduCommand.ApduResponseType);
 
-            var responseBuf =  connection.Transceive(apduCommand.GetBuffer());
+            if (!IsFirstConnection)
+            {
+                await Task.Delay(500);
+            }
+
+            var responseBuf = connection.Transceive(apduCommand.GetBuffer());
 
             apduRes.ExtractResponse(responseBuf.ToArray());
 
-            return Task.FromResult(apduRes);
+           
+            return apduRes;
         }
     }
 }

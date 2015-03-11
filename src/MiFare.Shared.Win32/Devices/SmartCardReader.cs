@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MiFare.PcSc;
 using MiFare.Win32;
 
 namespace MiFare.Devices
@@ -86,6 +87,9 @@ namespace MiFare.Devices
                         if (cardInserted)
                         {
                             cardInserted = false;
+
+                            // HACK: Let our tranceive method know it's gone
+                            SmartCardConnectionExtension.IsFirstConnection = false;
 
                             OnDisconnect();
                         }

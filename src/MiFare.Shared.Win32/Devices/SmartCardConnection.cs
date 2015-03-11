@@ -33,7 +33,7 @@ namespace MiFare.Devices
                 dwProtocol = 0x2
             };
 
-            var receiveBuffer = new byte[256];
+            var receiveBuffer = new byte[255];
             var rlen = receiveBuffer.Length;
 
             Debug.WriteLine($"SmartCardConnection.Transceive: hCard = {hCard}, buffer = {buffer.ByteArrayToString()}");
