@@ -43,7 +43,7 @@
 
   <Target Name="Build" DependsOnTargets="PackageRestore">
     <MSBuild
-        Projects="MiFareRT.sln"
+        Projects="MiFare.sln"
         Targets="Build"
         Properties="Configuration=$(Configuration);TrackFileAccess=$(TrackFileAccess)"/>
   </Target>
