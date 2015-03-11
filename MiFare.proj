@@ -57,8 +57,8 @@
   </Target>
 
   <Target Name='GitLink'>
-    <Exec Command='.nuget\GitLink.exe $(MSBuildThisFileDirectory) -u https://github.com/onovotny/MiFareRT -commit $(CommitHash)' IgnoreExitCode='true' Condition="'$(CommitHash)' != '' " />
-    <Exec Command='.nuget\GitLink.exe $(MSBuildThisFileDirectory) -u https://github.com/onovotny/MiFareRT' IgnoreExitCode='true' Condition="'$(CommitHash)' == '' " />
+    <Exec Command='.nuget\GitLink.exe $(MSBuildThisFileDirectory) -u https://github.com/onovotny/MiFare -commit $(CommitHash)' IgnoreExitCode='true' Condition="'$(CommitHash)' != '' " />
+    <Exec Command='.nuget\GitLink.exe $(MSBuildThisFileDirectory) -u https://github.com/onovotny/MiFare' IgnoreExitCode='true' Condition="'$(CommitHash)' == '' " />
   </Target>
 
   <Target Name="SetVersionNumber">

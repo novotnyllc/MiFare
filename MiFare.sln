@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9EED52A0-0239-4D3D-961A-C7823743936D}"
 	ProjectSection(SolutionItems) = preProject
 		MiFare.nuspec = MiFare.nuspec
+		MiFare.proj = MiFare.proj
 		readme.md = readme.md
 	EndProjectSection
 EndProject
