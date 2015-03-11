@@ -18,7 +18,7 @@ namespace MiFare.Devices
             this.hProtocol = hProtocol;
         }
 
-        public byte[] Tranceive(byte[] buffer)
+        public byte[] Transceive(byte[] buffer)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
 
@@ -36,6 +36,7 @@ namespace MiFare.Devices
             var receiveBuffer = new byte[256];
             var rlen = receiveBuffer.Length;
 
+            Debug.WriteLine($"SmartCardConnection.Transceive: hCard = {hCard}, buffer = {buffer.ByteArrayToString()}");
             var retVal = SafeNativeMethods.SCardTransmit(hCard, ref sioreq, buffer, buffer.Length, ref rioreq, receiveBuffer, ref rlen);
             Helpers.CheckError(retVal);
 
@@ -50,6 +51,7 @@ namespace MiFare.Devices
         {
             if (hCard != IntPtr.Zero)
             {
+                Debug.WriteLine($"SmartCardConnection.Disconnect: {hCard}");
                 var retVal = SafeNativeMethods.SCardDisconnect(hCard, Constants.SCARD_UNPOWER_CARD);
 
                 hCard = IntPtr.Zero;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using MiFare.Win32;
 
@@ -15,7 +16,6 @@ namespace MiFare.Devices
             this.hContext = hContext;
             this.readerName = readerName;
             AtrBytes = atrBytes;
-            Connect();
         }
 
         public SmartCardConnection Connect()
@@ -24,6 +24,8 @@ namespace MiFare.Devices
             int hProtocol;
             var retVal = SafeNativeMethods.SCardConnect(hContext, readerName, Constants.SCARD_SHARE_SHARED, Constants.SCARD_PROTOCOL_T1, out hCard, out hProtocol);
             Helpers.CheckError(retVal);
+
+            Debug.WriteLine($"SmartCardConnection.Connect: hContext = {hContext}, hCard = {hCard}, protocol = {hProtocol}");
 
             return new SmartCardConnection(hCard, hProtocol);
         }

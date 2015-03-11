@@ -36,7 +36,7 @@ namespace MiFare.PcSc
         {
             var apduRes = (Iso7816.ApduResponse)Activator.CreateInstance(apduCommand.ApduResponseType);
 
-            var responseBuf =  connection.Tranceive(apduCommand.GetBuffer());
+            var responseBuf =  connection.Transceive(apduCommand.GetBuffer());
 
             apduRes.ExtractResponse(responseBuf.ToArray());
 
