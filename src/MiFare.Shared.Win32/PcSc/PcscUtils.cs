@@ -29,10 +29,10 @@ namespace MiFare.PcSc
         ///     APDU command object to send to the ICC
         /// </param>
         /// <param name="connection">
-        ///     SmartCard object
+        ///     SmartCardConnection object
         /// </param>
         /// <returns>APDU response object of type defined by the APDU command object</returns>
-        public static Task<Iso7816.ApduResponse> TransceiveAsync(this SmartCard connection, ApduCommand apduCommand)
+        public static Task<Iso7816.ApduResponse> TransceiveAsync(this SmartCardConnection connection, ApduCommand apduCommand)
         {
             var apduRes = (Iso7816.ApduResponse)Activator.CreateInstance(apduCommand.ApduResponseType);
 

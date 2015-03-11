@@ -10,12 +10,10 @@ using MiFare.Win32;
 namespace MiFare.Devices
 {
     // Represents a smart card reader
-    public class SmartCardReader : IDisposable
+    public sealed class SmartCardReader : IDisposable
     {
-        private readonly IntPtr hContext;
-        private IntPtr hCard;
-        private IntPtr hProtocol;
-        private readonly Task monitorTask;
+        private IntPtr hContext;
+        private Task monitorTask;
 
         public event EventHandler<CardEventArgs> CardAdded;
         public event EventHandler<CardEventArgs> CardRemoved;
@@ -40,7 +38,7 @@ namespace MiFare.Devices
         private async Task CardDetectionLoop(CancellationToken token)
         {
 
-            await Task.Delay(1)
+            await Task.Delay(1, token)
                       .ConfigureAwait(false); // resume on threadpool thread
 
             while (!token.IsCancellationRequested)
@@ -70,12 +68,15 @@ namespace MiFare.Devices
 
 
                             var card = new SmartCard(hContext, Name, currentState.ATRValue);
-                            if (Interlocked.CompareExchange(ref currentCard, null, card) == null)
+                            if (Interlocked.CompareExchange(ref currentCard, card, null) == null)
                             {
                                 // card was not inserted, now it is
+                                // Raise on another thread to not block this loop
                                 var evt = CardAdded;
                                 if (evt != null)
-                                    evt(this, new CardEventArgs(card));
+                                {
+                                    Task.Run(() => evt(this, new CardEventArgs(card)));
+                                }
                             }
                         }
                     }
@@ -90,7 +91,7 @@ namespace MiFare.Devices
                         }
                     }
 
-                    await Task.Delay(250);
+                    await Task.Delay(250, token);
                 }
                 catch (Exception ex)
                 {
@@ -104,10 +105,12 @@ namespace MiFare.Devices
             var oldCard = Interlocked.CompareExchange(ref currentCard, null, currentCard);
             if (oldCard != null)
             {
-                oldCard.Dispose();
                 var evt = CardRemoved;
                 if (evt != null)
-                    evt(this, new CardEventArgs(oldCard));
+                {
+                    // run on seperate thread to not block loop
+                    Task.Run(() => evt(this, new CardEventArgs(oldCard)));
+                }
             }
         }
 
@@ -117,13 +120,26 @@ namespace MiFare.Devices
             GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
             {
-                monitorTokenSource.Cancel(false);
+                monitorTokenSource?.Cancel(false);
+                monitorTask?.Wait();
+                monitorTokenSource?.Dispose();
+
+                monitorTokenSource = null;
+                monitorTask = null;
+
+                if (cardInserted)
+                {
+                    cardInserted = false;
+                    OnDisconnect();
+                }
+
             }
             SafeNativeMethods.SCardReleaseContext(hContext);
+            hContext = IntPtr.Zero;
         }
 
         ~SmartCardReader()

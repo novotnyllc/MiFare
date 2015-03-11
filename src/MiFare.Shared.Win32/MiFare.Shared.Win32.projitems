@@ -14,6 +14,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFareWin32CardReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Devices\CardEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Devices\SmartCard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\SmartCardConnection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Devices\SmartCardReader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PcSc\PcscUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Win32\Constants.cs" />

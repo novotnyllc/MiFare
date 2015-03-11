@@ -17,25 +17,15 @@ namespace MiFare.Classic
         private readonly SmartCard smartCard;
         private readonly Task initialization;
 
-        private readonly object connectionLock = new object();
-
-
         public MiFareWinRTCardReader(SmartCard smartCard, IReadOnlyCollection<SectorKeySet> keys) : base(keys)
         {
             this.smartCard = smartCard;
             initialization = Initialize();
         }
-
-       
-
+        
         private async Task Initialize()
         {
-            var newConnection = await smartCard.ConnectAsync();
-            lock (connectionLock)
-            {
-                connection?.Dispose();
-                connection = newConnection;
-            }
+            connection = await smartCard.ConnectAsync();
         }
 
         protected override async Task<byte[]> GetAnswerToResetAsync()
@@ -58,11 +48,8 @@ namespace MiFare.Classic
         {
             if (disposing)
             {
-                lock (connectionLock)
-                {
-                    connection?.Dispose();
-                    connection = null;
-                }
+                connection?.Dispose();
+                connection = null;
             }
 
             base.Dispose(disposing);

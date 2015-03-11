@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -320,6 +321,7 @@ namespace MiFare.Classic
 
         public void Dispose()
         {
+            Debug.WriteLine("Dispose: " + nameof(MiFareCard));
             var disp = Reader as IDisposable;
             disp?.Dispose();
         }

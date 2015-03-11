@@ -57,8 +57,8 @@ namespace MiFare.Win32
         string cReaderName,
         uint dwShareMode,
         uint dwPrefProtocol,
-        ref IntPtr hCard,
-        ref IntPtr ActiveProtocol);
+        out IntPtr hCard,
+        out int ActiveProtocol);
 
 
         // *********************************************************************************************************
