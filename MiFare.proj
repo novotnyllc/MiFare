@@ -38,7 +38,7 @@
 
   <Target Name="PackageRestore" DependsOnTargets="_DownloadNuGet">
     <Message Text="Restoring NuGet packages..." Importance="High" />
-    <Exec Command="$(NuGetExePath) restore $(SolutionDir)MiFareRT.sln -NonInteractive -Source @(PackageSource) -Verbosity quiet" />
+    <Exec Command="$(NuGetExePath) restore $(SolutionDir)MiFare.sln -NonInteractive -Source @(PackageSource) -Verbosity quiet" />
   </Target>
 
   <Target Name="Build" DependsOnTargets="PackageRestore">
