@@ -49,15 +49,13 @@ namespace MiFareReader.Tablet
         {
             try
             {
-                var readerList = CardReader.GetReaderNames();
-                
-                if(readerList.Count == 0)
+                reader = CardReader.Create();
+                if (reader == null)
                 {
                     PopupMessage("No Readers Found");
                     return;
                 }
 
-                reader = CardReader.Create(readerList.First());
                 reader.CardAdded += CardAdded;
                 reader.CardRemoved += CardRemoved;
             }

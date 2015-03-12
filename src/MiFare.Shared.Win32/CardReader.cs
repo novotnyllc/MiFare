@@ -11,11 +11,37 @@ namespace MiFare
 {
     public static class CardReader
     {
-        public static SmartCardReader Create(string readerName)
+        /// <summary>
+        /// If none is supplied, this method will try to find the best reader to use. \
+        /// If a single one exists, it'll use that, otherwise it'll look for one with
+        /// CL in the name for "contactless".
+        /// </summary>
+        /// <param name="readerName"></param>
+        /// <returns>SmartCardReader or null if not found</returns>
+        public static SmartCardReader Create(string readerName = null)
         {
+            if (readerName == null)
+            {
+                var names = GetReaderNames();
+                
+                if (names.Count > 1)
+                {
+                    // Look for one with CL in it
+                    readerName = names.FirstOrDefault(n => n.Contains("-CL"));
+                    if (readerName == null)
+                    {
+                        // too many readers and we cant figure out which one to use
+                        throw new ArgumentException("Multiple readers found. Cannot determine which to use, specify a name", nameof(readerName));
+                    }
+                }
+                else
+                {
+                    readerName = names.First();
+                }
+            }
             return new SmartCardReader(readerName);
         }
-
+        
         public static IReadOnlyList<string> GetReaderNames()
         {
             const char nullchar = (char)0;
