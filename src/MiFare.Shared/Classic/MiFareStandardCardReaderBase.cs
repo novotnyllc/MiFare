@@ -89,7 +89,7 @@ namespace MiFare.Classic
             var blockNumber = SectorToBlock(sector, 0);
 
             // Load the key and try to authenticate to it
-            await TransceiveAsync(new LoadKey(keyToUse, 0, (byte)gaKeyType));
+            await TransceiveAsync(new LoadKey(keyToUse, 0));
             var res = await TransceiveAsync(new PcSc.MiFareStandard.GeneralAuthenticate(blockNumber, 0, gaKeyType));
 
             return res.Succeeded;
