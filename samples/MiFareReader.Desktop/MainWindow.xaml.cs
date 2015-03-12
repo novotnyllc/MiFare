@@ -1,45 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using System.Threading.Tasks;
-using Windows.Devices.SmartCards;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Popups;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 using MiFare;
 using MiFare.Classic;
 using MiFare.Devices;
 using MiFare.PcSc;
-using SmartCardReader = MiFare.Devices.SmartCardReader;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
-namespace MiFareReader.Tablet
+namespace MiFareReader.Desktop
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public sealed partial class MainPage : Page
+    public partial class MainWindow : Window
     {
         private SmartCardReader reader;
         private MiFareCard card;
-        
 
-        public MainPage()
+        public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             GetDevices();
         }
+
 
         /// <summary>
         /// Enumerates NFC reader and registers event handlers for card added/removed
@@ -65,13 +60,14 @@ namespace MiFareReader.Tablet
             }
         }
 
+
         private void CardRemoved(object sender, EventArgs e)
         {
             Debug.WriteLine("Card Removed");
             card?.Dispose();
             card = null;
 
-            ChangeTextBlockFontColor(TextBlock_Header, Windows.UI.Colors.Red);
+            ChangeTextBlockFontColor(TextBlock_Header, Colors.Red);
         }
 
         private async void CardAdded(object sender, CardEventArgs args)
@@ -79,7 +75,7 @@ namespace MiFareReader.Tablet
             Debug.WriteLine("Card Added");
             try
             {
-                ChangeTextBlockFontColor(TextBlock_Header, Windows.UI.Colors.Green);
+                ChangeTextBlockFontColor(TextBlock_Header, Colors.Green);
                 await HandleCard(args);
             }
             catch (Exception ex)
@@ -136,7 +132,7 @@ namespace MiFareReader.Tablet
                             DisplayText("Failed to load sector: " + sector);
                         }
                     }
-                    
+
                 }
             }
             catch (Exception e)
@@ -149,14 +145,14 @@ namespace MiFareReader.Tablet
         /// Changes font color of main application banner
         /// </summary>
         /// <returns>None</returns>
-        private void ChangeTextBlockFontColor(TextBlock textBlock, Windows.UI.Color color)
+        private void ChangeTextBlockFontColor(TextBlock textBlock, Color color)
         {
-            var ignored = this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            var ignored = this.Dispatcher.BeginInvoke(DispatcherPriority.Normal,(Action) (() =>
             {
                 textBlock.Foreground = new SolidColorBrush(color);
-            });
+            }));
         }
-        
+
         /// <summary>
         /// Change text of UI textbox
         /// </summary>
@@ -164,10 +160,11 @@ namespace MiFareReader.Tablet
         private void DisplayText(string message)
         {
             Debug.WriteLine(message);
-            var ignored = this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+
+            var ignored = this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
             {
                 txtLog.Text += message + Environment.NewLine;
-            });
+            }));
         }
 
         /// <summary>
@@ -176,11 +173,10 @@ namespace MiFareReader.Tablet
         /// <returns>None</returns>
         public async void PopupMessage(string message)
         {
-            await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            var ignored = this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
             {
-                var dlg = new MessageDialog(message);
-                await dlg.ShowAsync();
-            });
+                MessageBox.Show(message);
+            }));
         }
     }
 }
