@@ -88,8 +88,13 @@ namespace MiFare.Devices
                         {
                             cardInserted = false;
 
-                            // HACK: Let our tranceive method know it's gone
-                            SmartCardConnectionExtension.IsFirstConnection = false;
+                            // HACK: Let our tranceive method know it's gone for one buggy reader
+            
+                            // bug in the 5427 CK reader
+                            if (Name.Contains("5427 CK"))
+                            {
+                                SmartCardConnectionExtension.IsFirstConnection = false;
+                            }
 
                             OnDisconnect();
                         }

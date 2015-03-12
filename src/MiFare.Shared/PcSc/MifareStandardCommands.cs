@@ -73,7 +73,11 @@ namespace MiFare.PcSc.MiFareStandard
     public class LoadKey : LoadKeys
     {
         public LoadKey(byte[] mifareKey, byte keySlotNumber)
-            : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.Volatile, keySlotNumber, mifareKey)
+#if WINDOWS_APP
+            : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.NonVolatile, keySlotNumber, mifareKey)
+#else
+             : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.Volatile, keySlotNumber, mifareKey)
+#endif
         {
         }
     }
