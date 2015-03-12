@@ -72,9 +72,9 @@ namespace MiFare.PcSc.MiFareStandard
     /// </summary>
     public class LoadKey : LoadKeys
     {
-        public LoadKey(byte[] mifareKey, byte keySlotNumber)
+        public LoadKey(byte[] mifareKey, byte keySlotNumber, byte keyType)
 #if WINDOWS_APP
-            : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.NonVolatile, keySlotNumber, mifareKey)
+            : base(LoadKeysKeyType.CardKey, keyType, LoadKeysTransmissionType.Plain, LoadKeysStorageType.Volatile, keySlotNumber, mifareKey)
 #else
              : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.Volatile, keySlotNumber, mifareKey)
 #endif
