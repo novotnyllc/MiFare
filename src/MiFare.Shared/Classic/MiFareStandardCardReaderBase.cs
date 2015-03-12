@@ -22,6 +22,10 @@ namespace MiFare.Classic
        
         private Dictionary<SectorKey, byte[]> keyMap = new Dictionary<SectorKey, byte[]>();
 
+        private byte nextKeySlot;
+
+        private Dictionary<byte[], byte> keyToLocationMap = new Dictionary<byte[], byte>(KeyEqualityComparer.Default);
+
         protected MiFareStandardCardReaderBase(IReadOnlyCollection<SectorKeySet> keys)
         {
             if (!keys.All(set => set.IsValid))
@@ -88,9 +92,19 @@ namespace MiFare.Classic
             // Get the first block for the sector
             var blockNumber = SectorToBlock(sector, 0);
 
-            // Load the key and try to authenticate to it
-            await TransceiveAsync(new LoadKey(keyToUse, 0));
-            var res = await TransceiveAsync(new PcSc.MiFareStandard.GeneralAuthenticate(blockNumber, 0, gaKeyType));
+            // see if we have the key loaded already
+            byte location;
+            if (!keyToLocationMap.TryGetValue(keyToUse, out location))
+            {
+                location = nextKeySlot;
+                nextKeySlot++;
+                keyToLocationMap[keyToUse] = location;
+
+                // Load the key to the location
+                await TransceiveAsync(new LoadKey(keyToUse, location));
+            }
+
+            var res = await TransceiveAsync(new PcSc.MiFareStandard.GeneralAuthenticate(blockNumber, location, gaKeyType));
 
             return res.Succeeded;
         }
@@ -175,6 +189,24 @@ namespace MiFare.Classic
         ~MiFareStandardCardReaderBase()
         {
             Dispose(false);
+        }
+
+        private class KeyEqualityComparer : IEqualityComparer<byte[]>
+        {
+            public static readonly KeyEqualityComparer Default = new KeyEqualityComparer(); 
+            public bool Equals(byte[] x, byte[] y)
+            {
+                return x.SequenceEqual(y);
+            }
+
+            public int GetHashCode(byte[] obj)
+            {
+                unchecked
+                {
+                    var start = obj.Aggregate(obj[0] * 397, (current, b) => current ^ b.GetHashCode());
+                    return start;
+                }
+            }
         }
     }
 }
