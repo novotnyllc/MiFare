@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Scenarios.Auth;
+using Scenarios.Tickets;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -55,6 +57,30 @@ namespace Scenarios.Phone
             CurrentStateService.Instance.Mode = CardMode.Reset;
 
             App.RootFrame.Navigate(typeof(CardReaderPage));
+        }
+
+        private void OnWriteTicketClicked(object sender, RoutedEventArgs e)
+        {
+            TicketState.Instance.Mode = Mode.Cashier;
+            TicketState.Instance.TicketData = TicketData.Date.ToString("O");
+
+            App.RootFrame.Navigate(typeof(TicketCardReader));
+        }
+
+        private void OnSkiLiftClicked(object sender, RoutedEventArgs e)
+        {
+            TicketState.Instance.Mode = Mode.SkiLift;
+            TicketState.Instance.TicketData = string.Empty;
+
+            App.RootFrame.Navigate(typeof(TicketCardReader));
+        }
+
+        private void OnResetSkiClicked(object sender, RoutedEventArgs e)
+        {
+            TicketState.Instance.Mode = Mode.Reset;
+            TicketState.Instance.TicketData = string.Empty;
+
+            App.RootFrame.Navigate(typeof(TicketCardReader));
         }
 
         /// <summary>

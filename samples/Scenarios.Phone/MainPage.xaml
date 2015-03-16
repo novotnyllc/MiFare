@@ -8,51 +8,69 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot">
 
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Pivot>
+            <PivotItem Header="Auth">
+                <StackPanel>
+                    <Border BorderThickness="1" BorderBrush="White">
+                        <StackPanel>
+                            <TextBlock Text="Setup Card" Style="{StaticResource SubheaderTextBlockStyle}" />
+                            <TextBox x:Name="PinBox" PlaceholderText="PIN" />
+                            <TextBox x:Name="DataBox" PlaceholderText="Data" />
+                        </StackPanel>
+                    </Border>
+                    <Button
+                        Content="Set PIN / Write Data"
+                        HorizontalAlignment="Stretch"
+                        Click="OnSetClicked" />
+                    <Button
+                        Content="Validate PIN / Read Data"
+                        HorizontalAlignment="Stretch"
+                        Click="OnValidateClicked" />
+                    <Button
+                        Content="Reset to Default"
+                        HorizontalAlignment="Stretch"
+                        Click="OnResetClicked" />
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="Lift Tickets">
+                <StackPanel>
+                    <Border BorderThickness="1" BorderBrush="White" Padding="3">
+                        <StackPanel>
+                            <TextBlock Text="Ticket Counter" Style="{StaticResource SubheaderTextBlockStyle}" />
+                            <DatePicker x:Name="TicketData" />
+                            <Button 
+                                HorizontalAlignment="Stretch"
+                                Content="Save Ticket Info"
+                                Click="OnWriteTicketClicked"
+                                />
+                        </StackPanel>
+                    </Border>
+                    <Border BorderThickness="1" BorderBrush="White" Margin="0,5" Padding="3">
+                        <StackPanel>
+                            <TextBlock Text="Ski Lift Gate" Style="{StaticResource SubheaderTextBlockStyle}" />
+                            <Button 
+                                HorizontalAlignment="Stretch"
+                                Content="Check Tickets"
+                                Click="OnSkiLiftClicked"
+                                />
+                        </StackPanel>
+                    </Border>
+                        <Button
+                        Content="Reset to Default"
+                        HorizontalAlignment="Stretch"
+                        Click="OnResetSkiClicked" />
+                </StackPanel>
+            </PivotItem>
+        </Pivot>
 
-        <!-- Title Panel -->
-        <StackPanel Grid.Row="0" Margin="19,0,0,0">
-            <TextBlock Text="MiFare Scenarios" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0"/>
-            <TextBlock Text="choose option" Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
-        </StackPanel>
 
-        <!--TODO: Content should be placed within the following grid-->
-        <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-        <StackPanel>
-                <Border BorderThickness="1" BorderBrush="White">
-                    <StackPanel>
-                        <TextBlock Text="Setup Card" Style="{StaticResource SubheaderTextBlockStyle}" />
-                        <TextBox x:Name="PinBox" PlaceholderText="PIN" />
-                        <TextBox x:Name="DataBox" PlaceholderText="Data" />
-                    </StackPanel>        
-                </Border>
-            <Button 
-                Content="Set PIN / Write Data"
-                HorizontalAlignment="Stretch"
-                Click="OnSetClicked"
-                />
-            <Button 
-                Content="Validate PIN / Read Data"
-                HorizontalAlignment="Stretch"
-                Click="OnValidateClicked"
-                />
-            <Button 
-                Content="Reset to Default"
-                HorizontalAlignment="Stretch"
-                Click="OnResetClicked"
-                />
-        </StackPanel>
-        </Grid>
     </Grid>
 </Page>

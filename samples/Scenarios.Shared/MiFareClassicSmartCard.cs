@@ -18,10 +18,9 @@ namespace Scenarios
     {
         private readonly byte[] masterKey;
         private readonly MiFareCard connection;
+        private readonly int sector;
 
-        private const int Sector = 1; // TODO: Determine which sector you'll use for this or use the MAD to get a sector
-        
-        public MiFareClassicSmartCard(string pin, string cardId, MiFareCard connection)
+        public MiFareClassicSmartCard(string pin, string cardId, MiFareCard connection, int sector)
         {
             if (pin == null) throw new ArgumentNullException("pin");
             if (cardId == null) throw new ArgumentNullException("cardId");
@@ -32,15 +31,16 @@ namespace Scenarios
             connection.AddOrUpdateSectorKeySet(new SectorKeySet
             {
                 KeyType = KeyType.KeyA,
-                Sector = Sector,
+                Sector = sector,
                 Key = userKey
             });
 
             this.connection = connection;
+            this.sector = sector;
             CardId = cardId;
         }
 
-        public MiFareClassicSmartCard(byte[] masterKey, string cardId, MiFareCard connection)
+        public MiFareClassicSmartCard(byte[] masterKey, string cardId, MiFareCard connection, int sector)
         {
             if (masterKey == null) throw new ArgumentNullException("masterKey");
             if (cardId == null) throw new ArgumentNullException("cardId");
@@ -51,7 +51,7 @@ namespace Scenarios
             connection.AddOrUpdateSectorKeySet(new SectorKeySet
             {
                 KeyType = KeyType.KeyB,
-                Sector = Sector,
+                Sector = sector,
                 Key = masterKey
             });
 
@@ -59,6 +59,7 @@ namespace Scenarios
             CardId = cardId;
             this.masterKey = masterKey;
             this.connection = connection;
+            this.sector = sector;
         }
 
         public string CardId
@@ -73,9 +74,9 @@ namespace Scenarios
                                         {
                                             try
                                             {
-                                                var s = connection.GetSector(Sector);
+                                                var s = connection.GetSector(sector);
 
-                                                var data = await connection.GetData(Sector, 0, s.DataLength);
+                                                var data = await connection.GetData(sector, 0, s.DataLength);
 
                                                 var name = Encoding.UTF8.GetString(data, 0, data.Length);
 
@@ -99,7 +100,7 @@ namespace Scenarios
                                  {
                                      try
                                      {
-                                         var s = connection.GetSector(Sector);
+                                         var s = connection.GetSector(sector);
 
                                          var dataBytes = Encoding.UTF8.GetBytes(data);
 
@@ -131,7 +132,7 @@ namespace Scenarios
                                          connection.AddOrUpdateSectorKeySet(new SectorKeySet
                                          {
                                              KeyType = KeyType.KeyA,
-                                             Sector = Sector,
+                                             Sector = sector,
                                              Key = keyBytes
                                          });
                                      }
@@ -155,11 +156,11 @@ namespace Scenarios
                                          connection.AddOrUpdateSectorKeySet(new SectorKeySet
                                          {
                                              KeyType = KeyType.KeyA,
-                                             Sector = Sector,
+                                             Sector = sector,
                                              Key = Defaults.KeyA
                                          });
 
-                                         var s = connection.GetSector(Sector);
+                                         var s = connection.GetSector(sector);
 
                                          if (!((s.Access.Trailer.KeyAWrite == TrailerAccessCondition.ConditionEnum.KeyB) &&
                                                (s.Access.Trailer.KeyBWrite == TrailerAccessCondition.ConditionEnum.KeyB) &&
@@ -207,7 +208,7 @@ namespace Scenarios
                                                  new SectorKeySet
                                                  {
                                                      KeyType = KeyType.KeyA,
-                                                     Sector = Sector,
+                                                     Sector = sector,
                                                      Key = masterKey
                                                  }
                                                  );
@@ -216,7 +217,7 @@ namespace Scenarios
                                                  new SectorKeySet
                                                  {
                                                      KeyType = KeyType.KeyB,
-                                                     Sector = Sector,
+                                                     Sector = sector,
                                                      Key = masterKey
                                                  }
                                                  );
@@ -241,7 +242,7 @@ namespace Scenarios
                                  {
                                      try
                                      {
-                                         var s = connection.GetSector(Sector);
+                                         var s = connection.GetSector(sector);
                                          try
                                          {
                                              s.Access.DataAreas[0].Read = DataAreaAccessCondition.ConditionEnum.KeyA;
@@ -279,7 +280,7 @@ namespace Scenarios
                                                  new SectorKeySet
                                                  {
                                                      KeyType = KeyType.KeyA,
-                                                     Sector = Sector,
+                                                     Sector = sector,
                                                      Key = Defaults.KeyA
                                                  }
                                                  );

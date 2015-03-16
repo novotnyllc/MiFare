@@ -28,7 +28,11 @@ There are two sets of sample projects in this repo:
 This is in the `samples\MiFareReader.*` project directories. This project shows basic usage and will loop through the 16 sectors of a classic card to read whatever data the default keys will allow.
 
 ### Scenarios
-A more advanced sample in the `samples\Scenarios.*` directories. This project shows a potential scenario where a user provides a PIN used to protect some data on the card. An app can then authenticate a user against the card to read the stored data. This could be a generated secret known by a server as a surrogate/strong password.
+A more advanced sample in the `samples\Scenarios.*` directories. This project shows atwo potential scenarios:
+
+1.  A user provides a PIN used to protect some data on the card. An app can then authenticate a user against the card to read the stored data. This could be a generated secret known by a server as a surrogate/strong password.
+2.  A ski lift ticket system where a cashier encodes the expiration date of the pass onto the card and a lift agent/gate validates the expiration date.
+
 
 ## Credits
 This library is made possible by 

@@ -26,6 +26,8 @@ namespace Scenarios
         private static readonly object cardConnectionLock = new object();
         private static string currentCardId;
 
+        private const int AuthSector = 1; // TODO: Determine which sector you'll use for this or use the MAD to get a sector
+
         private static EventHandler cardAdded;
         private static EventHandler cardRemoved;
 
@@ -96,7 +98,7 @@ namespace Scenarios
             if (currentConnection == null)
                 throw new InvalidOperationException("No card present. This method can only be called after CardAdded is fired");
 
-            return new MiFareClassicSmartCard(masterKey, currentCardId, currentConnection);
+            return new MiFareClassicSmartCard(masterKey, currentCardId, currentConnection, AuthSector);
         }
 
 
@@ -105,7 +107,7 @@ namespace Scenarios
             if (currentConnection == null)
                 throw new InvalidOperationException("No card present. This method can only be called after CardAdded is fired");
 
-            return new MiFareClassicSmartCard(pin, currentCardId, currentConnection);
+            return new MiFareClassicSmartCard(pin, currentCardId, currentConnection, AuthSector);
         }
         
         public static

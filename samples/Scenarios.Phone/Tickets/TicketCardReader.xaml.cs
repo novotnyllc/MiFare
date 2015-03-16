@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -20,22 +21,25 @@ using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=390556
 
-namespace Scenarios.Phone
+namespace Scenarios.Tickets
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class CardReaderPage : Page
+    public sealed partial class TicketCardReader : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private Random random = new Random();
 
         // TODO: Get this somewhere else -- do not store in the app/binary
         private readonly byte[] MasterKey = new byte[] { 0xab, 0xcd, 0xef, 0xab, 0xcd, 0xef };
 
-        private CardMode mode;
+        private readonly string GateKey = "someReadKey";
 
-        public CardReaderPage()
+        private Mode mode;
+
+        public TicketCardReader()
         {
             this.InitializeComponent();
 
@@ -66,15 +70,15 @@ namespace Scenarios.Phone
 
                 switch (mode)
                 {
-                    case CardMode.SetPin:
-                        AppendText("New PIN", false);
+                    case Mode.Cashier:
+                        AppendText("Set Data", false);
                         await OnNewPin(SmartCardFactory.GetSmartCardForProvisioning(MasterKey));
                         break;
-                    case CardMode.ReadData:
+                    case Mode.SkiLift:
                         AppendText("Validate PIN", false);
-                        await OnValidatePin(SmartCardFactory.GetSmartCardForValidation(CurrentStateService.Instance.Pin));
+                        await OnValidateData(SmartCardFactory.GetSmartCardForValidation(GateKey));
                         break;
-                    case CardMode.Reset:
+                    case Mode.Reset:
                         await ResetToDefault(SmartCardFactory.GetSmartCardForProvisioning(MasterKey));
                         break;
                     default:
@@ -93,24 +97,7 @@ namespace Scenarios.Phone
             {
                 AppendText("Complete");
             }
-
-            QuitButton.IsEnabled = true;
-        }
-
-        private async Task OnValidatePin(ISmartCard smartCard)
-        {
-            try
-            {
-                // try to get the data
-                var data = await smartCard.GetData();
-                // if we get here, we got the data
-                AppendText("Successfully validated pin");
-                AppendText(data);
-            }
-            catch (SmartCardException)
-            {
-                AppendText("Incorrect PIN");
-            }
+            
         }
 
         private async Task OnNewPin(ISmartCardAdmin smartCard)
@@ -129,23 +116,49 @@ namespace Scenarios.Phone
             {
                 // Nothing written yet
                 await DoSetPin(smartCard);
+                await SetResult(true);
             }
             else
             {
                 AppendText("Error: card already has data on it!");
+                await SetResult(false);
             }
         }
 
         private async Task DoSetPin(ISmartCardAdmin smartCard)
         {
-            await smartCard.SetUserPin(CurrentStateService.Instance.Pin, CurrentStateService.Instance.Data);
-            AppendText("PIN set");
+            await smartCard.SetUserPin(GateKey, TicketState.Instance.TicketData);
+            AppendText("data set");
 
             // read the data back
-            var sc = SmartCardFactory.GetSmartCardForValidation(CurrentStateService.Instance.Pin);
+            var sc = SmartCardFactory.GetSmartCardForValidation(GateKey);
             var data = await sc.GetData();
 
             AppendText("Verified: " + data + " was written to the card.");
+        }
+
+
+        private async Task OnValidateData(ISmartCard smartCard)
+        {
+            try
+            {
+                // try to get the data
+                var data = await smartCard.GetData();
+                // if we get here, we got the data
+                AppendText("Retrieved data from card:");
+                AppendText(data);
+
+                // Todo: Add validation of data
+                var date = DateTime.Parse(data);
+                if(DateTime.Now > date)
+                    await SetResult(false);
+                else 
+                    await SetResult(true);
+            }
+            catch (SmartCardException)
+            {
+                AppendText("Error, card not read");
+            }
         }
 
         private async Task ResetToDefault(ISmartCardAdmin smartCard)
@@ -153,6 +166,7 @@ namespace Scenarios.Phone
             AppendText("Resetting to default");
 
             await smartCard.ResetToDefault();
+            await SetResult(true);
 
             AppendText("Reset to default");
         }
@@ -160,14 +174,24 @@ namespace Scenarios.Phone
         private void AppendText(string text, bool newLine = true)
         {
             Debug.WriteLine(text);
-            Result.Text += (newLine ? Environment.NewLine : string.Empty) + text;
+           // Result.Text += (newLine ? Environment.NewLine : string.Empty) + text;
         }
 
-
-        private void OnQuitClicked(object sender, RoutedEventArgs e)
+        private async Task SetResult(bool? result)
         {
-            Application.Current.Exit();
+            if (result.HasValue)
+            {
+                Result.Background = result.Value ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
+            }
+            else
+            {
+                Result.Background = new SolidColorBrush(Colors.Gray);
+            }
+
+            await Task.Delay(1000);
+            Result.Background = new SolidColorBrush(Colors.Gray);
         }
+
 
         /// <summary>
         /// Gets the <see cref="NavigationHelper"/> associated with this <see cref="Page"/>.
@@ -232,13 +256,13 @@ namespace Scenarios.Phone
         {
             this.navigationHelper.OnNavigatedTo(e);
 
-            mode = CurrentStateService.Instance.Mode;
+            mode = TicketState.Instance.Mode;
 
             await SmartCardFactory.Initialize(); // this will also clear any prev event handlers
 
             SmartCardFactory.CardAdded += OnCardAdded;
             SmartCardFactory.CardRemoved += OnCardRemoved;
-
+            
             Debug.WriteLine("Subscribed from smartcard factory");
         }
 
