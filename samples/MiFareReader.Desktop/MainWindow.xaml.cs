@@ -44,7 +44,7 @@ namespace MiFareReader.Desktop
         {
             try
             {
-                reader = CardReader.Create();
+                reader = CardReader.Find();
                 if (reader == null)
                 {
                     PopupMessage("No Readers Found");

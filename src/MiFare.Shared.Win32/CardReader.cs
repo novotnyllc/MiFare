@@ -18,12 +18,15 @@ namespace MiFare
         /// </summary>
         /// <param name="readerName"></param>
         /// <returns>SmartCardReader or null if not found</returns>
-        public static SmartCardReader Create(string readerName = null)
+        public static SmartCardReader Find(string readerName = null)
         {
             if (readerName == null)
             {
                 var names = GetReaderNames();
-                
+                if (names.Count == 0)
+                {
+                    return null;
+                }
                 if (names.Count > 1)
                 {
                     // Look for one with CL in it
