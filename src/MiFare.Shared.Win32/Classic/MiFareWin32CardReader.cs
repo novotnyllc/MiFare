@@ -15,7 +15,8 @@ namespace MiFare.Classic
     {
         private readonly SmartCard smartCard;
         private SmartCardConnection connection;
-        
+        private static readonly Task<ApduResponse> completed = Task.FromResult<ApduResponse>(new NoResponse());
+
         public MiFareWin32CardReader(SmartCard smartCard, IReadOnlyCollection<SectorKeySet> keys) : base(keys)
         {
             this.smartCard = smartCard;
@@ -33,7 +34,7 @@ namespace MiFare.Classic
 
         protected override Task<ApduResponse> TransceiveAsync(ApduCommand apduCommand)
         {
-            return  connection.TransceiveAsync(apduCommand);
+            return connection?.TransceiveAsync(apduCommand) ?? completed;
         }
 
         protected override void Dispose(bool disposing)

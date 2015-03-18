@@ -136,13 +136,8 @@ namespace MiFare.PcSc.Iso7816
         /// Detects if the command has succeeded
         /// </summary>
         /// <returns></returns>
-        public virtual bool Succeeded
-        {
-            get
-            {
-                return SW == 0x9000;
-            }
-        }
+        public virtual bool Succeeded => SW == 0x9000;
+
         /// <summary>
         /// command processing status
         /// </summary>
@@ -203,6 +198,11 @@ namespace MiFare.PcSc.Iso7816
         {
             return "ApduResponse SW=" + SW.ToString("X4") + " (" + SWTranslation + ")" + ((ResponseData != null && ResponseData.Length > 0) ? (",Data=" + BitConverter.ToString(ResponseData).Replace("-", "")) : "");
         }
+    }
+
+    internal class NoResponse : ApduResponse
+    {
+        public override bool Succeeded => false;
     }
     /// <summary>
     /// Class that implements select command

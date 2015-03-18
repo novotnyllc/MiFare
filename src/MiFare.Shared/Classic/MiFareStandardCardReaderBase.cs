@@ -101,7 +101,9 @@ namespace MiFare.Classic
                 keyToLocationMap[keyToUse] = location;
 
                 // Load the key to the location
-                await TransceiveAsync(new LoadKey(keyToUse, location));
+                var r = await TransceiveAsync(new LoadKey(keyToUse, location));
+                if (!r.Succeeded)
+                    return false; // could not load the key
             }
 
             var res = await TransceiveAsync(new PcSc.MiFareStandard.GeneralAuthenticate(blockNumber, location, gaKeyType));
