@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>MiFare</id>
-    <version>1.0-beta4</version>
+    <version>1.0-beta5</version>
     <title>MiFare Classic PC/SC Library</title>
     <authors>Oren Novotny</authors>
     <owners />
