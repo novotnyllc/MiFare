@@ -40,11 +40,11 @@ namespace MiFareReader.Desktop
         /// Enumerates NFC reader and registers event handlers for card added/removed
         /// </summary>
         /// <returns>None</returns>
-        private void GetDevices()
+        private async void GetDevices()
         {
             try
             {
-                reader = CardReader.Find();
+                reader = await CardReader.FindAsync();
                 if (reader == null)
                 {
                     PopupMessage("No Readers Found");

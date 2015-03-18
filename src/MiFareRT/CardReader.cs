@@ -10,7 +10,7 @@ namespace MiFare
 {
     public static class CardReader
     {
-        public static async Task<SmartCardReader> Find(Func<DeviceInformationCollection, DeviceInformation> selector = null)
+        public static async Task<SmartCardReader> FindAsync(Func<DeviceInformationCollection, DeviceInformation> selector = null)
         {
             var devices = await DeviceInformation.FindAllAsync(SmartCardReader.GetDeviceSelector(SmartCardReaderKind.Nfc));
 

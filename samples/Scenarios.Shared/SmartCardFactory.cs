@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Devices.SmartCards;
+
 using MiFare;
 using MiFare.Classic;
 using MiFare.PcSc;
+
 #if WINDOWS_PHONE_APP
-
-#endif
-
-#if WINDOWS_APP
+using Windows.Devices.SmartCards;
+#elif WINDOWS_APP
 using MiFare.Devices;
 #endif
+
 
 namespace Scenarios
 {
@@ -110,13 +110,7 @@ namespace Scenarios
             return new MiFareClassicSmartCard(pin, currentCardId, currentConnection, AuthSector);
         }
         
-        public static
-#if WINDOWS_PHONE_APP
-            async Task
-#else
-            void
-#endif
-            Initialize()
+        public static async Task Initialize()
         {
             // Clear out any old event handlers
             cardAdded = null;
@@ -126,11 +120,8 @@ namespace Scenarios
                 return;
 
             context = SynchronizationContext.Current;
-#if WINDOWS_APP
-            var r = CardReader.Find();
-#else
-            var r =  await CardReader.Find();
-#endif
+
+            var r =  await CardReader.FindAsync();
             if (r != null)
             {
                 reader = r;
@@ -140,11 +131,8 @@ namespace Scenarios
             }
         }
 
-#if WINDOWS_APP
-        private static async void OnCardAdded(object sender, CardEventArgs args)
-#else
         private static async void OnCardAdded(SmartCardReader sender, CardAddedEventArgs args)
-#endif
+
         {
             try
             {
@@ -170,11 +158,8 @@ namespace Scenarios
             
         }
 
-#if WINDOWS_APP
-        private static async void OnCardRemoved(object sender, CardEventArgs args)
-#else
-        private static async void OnCardRemoved(SmartCardReader sender, CardRemovedEventArgs args)
-#endif
+        private static void OnCardRemoved(SmartCardReader sender, CardRemovedEventArgs args)
+
         {
             lock (cardConnectionLock)
             {

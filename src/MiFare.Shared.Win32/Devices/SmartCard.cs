@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using MiFare.Win32;
 
 namespace MiFare.Devices
@@ -18,7 +19,7 @@ namespace MiFare.Devices
             AtrBytes = atrBytes;
         }
 
-        public SmartCardConnection Connect()
+        public Task<SmartCardConnection> ConnectAsync()
         {
             IntPtr hCard;
             int hProtocol;
@@ -27,7 +28,7 @@ namespace MiFare.Devices
 
             Debug.WriteLine($"SmartCardConnection.Connect: hContext = {hContext}, hCard = {hCard}, protocol = {hProtocol}");
 
-            return new SmartCardConnection(hCard, hProtocol);
+            return Task.FromResult(new SmartCardConnection(hCard, hProtocol));
         }
 
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MiFare.Devices
 {
-    public sealed class CardEventArgs : EventArgs
+    public class CardEventArgs : EventArgs
     {
         internal CardEventArgs(SmartCard card)
         {
@@ -12,5 +12,20 @@ namespace MiFare.Devices
         }
 
         public SmartCard SmartCard { get; private set; }
+    }
+
+    public sealed class CardAddedEventArgs : CardEventArgs
+    {
+        internal CardAddedEventArgs(SmartCard card) : base(card)
+        { 
+            
+        }
+    }
+
+    public sealed class CardRemovedEventArgs : CardEventArgs
+    {
+        internal CardRemovedEventArgs(SmartCard card) : base(card)
+        {
+        }
     }
 }

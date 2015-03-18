@@ -16,8 +16,8 @@ namespace MiFare.Devices
         private IntPtr hContext;
         private Task monitorTask;
 
-        public event EventHandler<CardEventArgs> CardAdded;
-        public event EventHandler<CardEventArgs> CardRemoved;
+        public event EventHandler<CardAddedEventArgs> CardAdded;
+        public event EventHandler<CardRemovedEventArgs> CardRemoved;
 
 
         private volatile bool cardInserted;
@@ -76,7 +76,7 @@ namespace MiFare.Devices
                                 var evt = CardAdded;
                                 if (evt != null)
                                 {
-                                    Task.Run(() => evt(this, new CardEventArgs(card)));
+                                    Task.Run(() => evt(this, new CardAddedEventArgs(card)));
                                 }
                             }
                         }
@@ -118,7 +118,7 @@ namespace MiFare.Devices
                 if (evt != null)
                 {
                     // run on seperate thread to not block loop
-                    Task.Run(() => evt(this, new CardEventArgs(oldCard)));
+                    Task.Run(() => evt(this, new CardRemovedEventArgs(oldCard)));
                 }
             }
         }

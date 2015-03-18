@@ -97,7 +97,7 @@ namespace PcscSdkSample
         {
             try
             {
-                Reader = await CardReader.Find();
+                Reader = await CardReader.FindAsync();
                 if (Reader == null)
                 {
                     PopupMessage("No Readers Found");
