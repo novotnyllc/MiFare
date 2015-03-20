@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Devices.SmartCards;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -16,11 +15,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+
 using MiFare;
 using MiFare.Classic;
 using MiFare.Devices;
 using MiFare.PcSc;
-using SmartCardReader = MiFare.Devices.SmartCardReader;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -45,11 +44,11 @@ namespace MiFareReader.Tablet
         /// Enumerates NFC reader and registers event handlers for card added/removed
         /// </summary>
         /// <returns>None</returns>
-        private void GetDevices()
+        private async void GetDevices()
         {
             try
             {
-                reader = CardReader.Find();
+                reader = await CardReader.FindAsync();
                 if (reader == null)
                 {
                     PopupMessage("No Readers Found");
@@ -74,7 +73,7 @@ namespace MiFareReader.Tablet
             ChangeTextBlockFontColor(TextBlock_Header, Windows.UI.Colors.Red);
         }
 
-        private async void CardAdded(object sender, CardEventArgs args)
+        private async void CardAdded(object sender, CardAddedEventArgs args)
         {
             Debug.WriteLine("Card Added");
             try
@@ -92,7 +91,7 @@ namespace MiFareReader.Tablet
         /// Sample code to hande a couple of different cards based on the identification process
         /// </summary>
         /// <returns>None</returns>
-        private async Task HandleCard(CardEventArgs args)
+        private async Task HandleCard(CardAddedEventArgs args)
         {
             try
             {

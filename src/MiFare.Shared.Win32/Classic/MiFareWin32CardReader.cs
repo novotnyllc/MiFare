@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using MiFare.PcSc;
 using System.Threading.Tasks;
 using MiFare.Devices;
@@ -15,12 +14,19 @@ namespace MiFare.Classic
     {
         private readonly SmartCard smartCard;
         private SmartCardConnection connection;
-        
+        private readonly Task initialization;
+        private static readonly Task<ApduResponse> completed = Task.FromResult<ApduResponse>(new NoResponse());
+
         public MiFareWin32CardReader(SmartCard smartCard, IReadOnlyCollection<SectorKeySet> keys) : base(keys)
         {
             this.smartCard = smartCard;
 
-            connection = smartCard.Connect();
+            initialization = Initialize();
+        }
+
+        private async Task Initialize()
+        {
+            connection = await smartCard.ConnectAsync();
         }
 
         protected override Task<byte[]> GetAnswerToResetAsync()
@@ -29,11 +35,12 @@ namespace MiFare.Classic
 
             return Task.FromResult(atr);
         }
-
-
-        protected override Task<ApduResponse> TransceiveAsync(ApduCommand apduCommand)
+        
+        protected override async Task<ApduResponse> TransceiveAsync(ApduCommand apduCommand)
         {
-            return  connection.TransceiveAsync(apduCommand);
+            await initialization;
+
+            return await (connection?.TransceiveAsync(apduCommand) ?? completed);
         }
 
         protected override void Dispose(bool disposing)

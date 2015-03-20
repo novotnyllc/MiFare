@@ -12,13 +12,13 @@ namespace MiFare
     public static class CardReader
     {
         /// <summary>
-        /// If none is supplied, this method will try to find the best reader to use. \
+        /// If none is supplied, this method will try to find the best reader to use. 
         /// If a single one exists, it'll use that, otherwise it'll look for one with
         /// CL in the name for "contactless".
         /// </summary>
         /// <param name="readerName"></param>
         /// <returns>SmartCardReader or null if not found</returns>
-        public static SmartCardReader Find(string readerName = null)
+        public static Task<SmartCardReader> FindAsync(string readerName = null)
         {
             if (readerName == null)
             {
@@ -42,7 +42,7 @@ namespace MiFare
                     readerName = names.First();
                 }
             }
-            return new SmartCardReader(readerName);
+            return Task.FromResult(new SmartCardReader(readerName));
         }
         
         public static IReadOnlyList<string> GetReaderNames()
