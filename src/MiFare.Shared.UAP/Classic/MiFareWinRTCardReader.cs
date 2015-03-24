@@ -49,7 +49,14 @@ namespace MiFare.Classic
         {
             if (disposing)
             {
-                connection?.Dispose();
+                try
+                {
+                    connection?.Dispose();
+                }
+                catch (Exception)
+                {
+                }
+                
                 connection = null;
             }
 
