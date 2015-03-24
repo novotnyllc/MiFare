@@ -72,6 +72,9 @@ namespace MiFare.PcSc.MiFareStandard
     /// </summary>
     public class LoadKey : LoadKeys
     {
+        // TODO: use runtime detection to do either a non-volatile load on desktop or a volatile load on phone
+        // TODO: retest non-volatile load on Win10 Mobile
+
         public LoadKey(byte[] mifareKey, byte keySlotNumber)
 #if WINDOWS_APP || WINDOWS_UAP
             : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.NonVolatile, keySlotNumber, mifareKey)
