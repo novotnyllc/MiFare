@@ -42,6 +42,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Scenarios.Shared", "samples
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareReader.Phone", "samples\MiFareReader.Phone\MiFareReader.Phone.csproj", "{B651DB87-F096-4F97-A0C1-1AA293EFE435}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFare", "src\MiFare\MiFare.csproj", "{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MiFare.Shared.UAP", "src\MiFare.Shared.UAP\MiFare.Shared.UAP.shproj", "{94B8B4E6-AB39-4EA8-BEF6-357204F5A37E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareReader.UAP", "samples\MiFareReader.UAP\MiFareReader.UAP.csproj", "{2F7F7926-8862-4FEE-B522-FA4E76368133}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\MiFare.Shared.Win32\MiFare.Shared.Win32.projitems*{054eae9c-23f5-47ee-acd2-8a1d2ca33575}*SharedItemsImports = 4
@@ -49,8 +55,12 @@ Global
 		samples\Scenarios.Shared\Scenarios.Shared.projitems*{5cba5918-df00-4272-9d7c-3f83d047bf66}*SharedItemsImports = 4
 		samples\Scenarios.Shared\Scenarios.Shared.projitems*{c5ceb056-69df-4b9c-b9d1-7d5dc9b89885}*SharedItemsImports = 13
 		src\MiFare.Shared\MiFare.Shared.projitems*{7160bf6d-2939-4496-8bb2-be2e729d3af8}*SharedItemsImports = 13
+		src\MiFare.Shared.UAP\MiFare.Shared.UAP.projitems*{cb81e95c-c093-4da7-a1e6-0e993f79352c}*SharedItemsImports = 4
 		src\MiFare.Shared\MiFare.Shared.projitems*{cb81e95c-c093-4da7-a1e6-0e993f79352c}*SharedItemsImports = 4
+		src\MiFare.Shared.UAP\MiFare.Shared.UAP.projitems*{94b8b4e6-ab39-4ea8-bef6-357204f5a37e}*SharedItemsImports = 13
 		src\MiFare.Shared.Win32\MiFare.Shared.Win32.projitems*{ef988caf-8dc2-4b21-8825-49165152a3a6}*SharedItemsImports = 13
+		src\MiFare.Shared.UAP\MiFare.Shared.UAP.projitems*{bbfe6fce-1299-49ff-ab68-cb18a05274cf}*SharedItemsImports = 4
+		src\MiFare.Shared\MiFare.Shared.projitems*{bbfe6fce-1299-49ff-ab68-cb18a05274cf}*SharedItemsImports = 4
 		src\MiFare.Shared.Win32\MiFare.Shared.Win32.projitems*{6939008f-7403-484c-82b2-799acaf3417c}*SharedItemsImports = 4
 		src\MiFare.Shared\MiFare.Shared.projitems*{6939008f-7403-484c-82b2-799acaf3417c}*SharedItemsImports = 4
 	EndGlobalSection
@@ -241,6 +251,46 @@ Global
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.ActiveCfg = Release|x86
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.Build.0 = Release|x86
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435}.Release|x86.Deploy.0 = Release|x86
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|ARM.ActiveCfg = Debug|ARM
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|ARM.Build.0 = Debug|ARM
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|x64.ActiveCfg = Debug|x64
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|x64.Build.0 = Debug|x64
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|x86.ActiveCfg = Debug|x86
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Debug|x86.Build.0 = Debug|x86
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|ARM.ActiveCfg = Release|ARM
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|ARM.Build.0 = Release|ARM
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|x64.ActiveCfg = Release|x64
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|x64.Build.0 = Release|x64
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|x86.ActiveCfg = Release|x86
+		{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}.Release|x86.Build.0 = Release|x86
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|ARM.ActiveCfg = Debug|ARM
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|ARM.Build.0 = Debug|ARM
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|ARM.Deploy.0 = Debug|ARM
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|x64.ActiveCfg = Debug|x64
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|x64.Build.0 = Debug|x64
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|x64.Deploy.0 = Debug|x64
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|x86.ActiveCfg = Debug|x86
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|x86.Build.0 = Debug|x86
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Debug|x86.Deploy.0 = Debug|x86
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|ARM.ActiveCfg = Release|ARM
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|ARM.Build.0 = Release|ARM
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|ARM.Deploy.0 = Release|ARM
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|x64.ActiveCfg = Release|x64
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|x64.Build.0 = Release|x64
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|x64.Deploy.0 = Release|x64
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|x86.ActiveCfg = Release|x86
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|x86.Build.0 = Release|x86
+		{2F7F7926-8862-4FEE-B522-FA4E76368133}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,5 +305,6 @@ Global
 		{5CBA5918-DF00-4272-9D7C-3F83D047BF66} = {1E47BD45-292F-4117-862F-C6613DCE84D9}
 		{C5CEB056-69DF-4B9C-B9D1-7D5DC9B89885} = {1E47BD45-292F-4117-862F-C6613DCE84D9}
 		{B651DB87-F096-4F97-A0C1-1AA293EFE435} = {97CB5050-D82F-459E-BCA4-E20C84DA2716}
+		{2F7F7926-8862-4FEE-B522-FA4E76368133} = {97CB5050-D82F-459E-BCA4-E20C84DA2716}
 	EndGlobalSection
 EndGlobal
