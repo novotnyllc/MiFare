@@ -87,7 +87,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="..\MiFare.Shared\MiFare.Shared.projitems" Label="Shared" />
   <Import Project="..\MiFare.Shared.UAP\MiFare.Shared.UAP.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -22,8 +22,6 @@ using Windows.Devices.SmartCards;
 using System.Diagnostics;
 using System.Text;
 using MiFare;
-using MiFare.Classic;
-using MiFare.PcSc;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -35,8 +33,7 @@ namespace PcscSdkSample
     public sealed partial class MainPage : Page
     {
         private SmartCardReader Reader;
-        private MiFareCard card;
-
+        private SmartCard card;
         /// <summary>
         /// MainPage Constructor
         /// </summary>
@@ -134,10 +131,9 @@ namespace PcscSdkSample
         /// <returns>None</returns>
         void CardRemoved(SmartCardReader sender, CardRemovedEventArgs args)
         {
-            
-            card?.Dispose();
 
             ChangeTextBlockFontColor(TextBlock_Header, Windows.UI.Colors.Red);
+            
         }
         /// <summary>
         /// Sample code to hande a couple of different cards based on the identification process
@@ -147,54 +143,8 @@ namespace PcscSdkSample
         {
             try
             {
-                card?.Dispose();
-                card = args.SmartCard.CreateMiFareCard();
+                card = args.SmartCard;
 
-
-
-                var cardIdentification = await card.GetCardInfo();
-               
-
-                DisplayText("Connected to card\r\nPC/SC device class: " + cardIdentification.PcscDeviceClass.ToString() + "\r\nCard name: " + cardIdentification.PcscCardName.ToString());
-
-               if (cardIdentification.PcscDeviceClass == MiFare.PcSc.DeviceClass.StorageClass
-                    && (cardIdentification.PcscCardName == CardName.MifareStandard1K || cardIdentification.PcscCardName == CardName.MifareStandard4K))
-                {
-                    // Handle MIFARE Standard/Classic
-                    DisplayText("MIFARE Standard/Classic card detected");
-
-                    
-                    var uid = await card.GetUid();
-                    DisplayText("UID:  " + BitConverter.ToString(uid));
-
-                    
-                    
-
-                    // 16 sectors, print out each one
-                    for (var sector = 0; sector < 16; sector++)
-                    {
-                        try
-                        {
-                            var data = await card.GetData(sector, 0, 48);
-
-                            string hexString = "";
-                            for (int i = 0; i < data.Length; i++)
-                            {
-                                hexString += data[i].ToString("X2") + " ";
-                            }
-
-                            DisplayText(string.Format("Sector '{0}':{1}", sector, hexString));
-                       
-                        }
-                        catch (Exception)
-                        {
-                            DisplayText("Failed to load sector: " + sector);
-                        }
-                    }
-                    
-                  
-
-                }
             }
             catch (Exception e)
             {

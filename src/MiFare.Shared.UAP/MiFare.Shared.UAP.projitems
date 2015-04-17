@@ -10,8 +10,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CardReader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Classic\FactoryMethods.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Classic\MiFareWinRTCardReader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PcSc\PcscUtils.cs" />
   </ItemGroup>
 </Project>
