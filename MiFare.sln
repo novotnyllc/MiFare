@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareRT", "src\MiFareRT\MiFareRT.csproj", "{CB81E95C-C093-4DA7-A1E6-0E993F79352C}"
 EndProject
@@ -44,9 +44,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareReader.Phone", "sampl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFare", "src\MiFare\MiFare.csproj", "{BBFE6FCE-1299-49FF-AB68-CB18A05274CF}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MiFare.Shared.UAP", "src\MiFare.Shared.UAP\MiFare.Shared.UAP.shproj", "{94B8B4E6-AB39-4EA8-BEF6-357204F5A37E}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MiFare.Shared.UWP", "src\MiFare.Shared.UAP\MiFare.Shared.UWP.shproj", "{94B8B4E6-AB39-4EA8-BEF6-357204F5A37E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareReader.UAP", "samples\MiFareReader.UAP\MiFareReader.UAP.csproj", "{2F7F7926-8862-4FEE-B522-FA4E76368133}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiFareReader.UWP", "samples\MiFareReader.UAP\MiFareReader.UWP.csproj", "{2F7F7926-8862-4FEE-B522-FA4E76368133}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
