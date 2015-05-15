@@ -6,13 +6,29 @@ using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.SmartCards;
 
+#if WINDOWS_UAP
+using Windows.Foundation.Metadata;
+#endif
+
 namespace MiFare
 {
     public static class CardReader
     {
         public static async Task<SmartCardReader> FindAsync(Func<DeviceInformationCollection, DeviceInformation> selector = null)
         {
+#if WINDOWS_UAP
+            // Make sure we have the API we need
+            if (!ApiInformation.IsTypePresent(typeof(SmartCardConnection).FullName))
+                return null;
+#endif
+
             var devices = await DeviceInformation.FindAllAsync(SmartCardReader.GetDeviceSelector(SmartCardReaderKind.Nfc));
+
+// if none, fall back to generic
+            if (devices.Count == 0)
+            {
+                devices = await DeviceInformation.FindAllAsync(SmartCardReader.GetDeviceSelector(SmartCardReaderKind.Generic));
+            }
 
             // There is a bug on some devices that were updated to WP8.1 where an NFC SmartCardReader is
             // enumerated despite that the device does not support it. As a workaround, we can do an additonal check
@@ -23,6 +39,16 @@ namespace MiFare
             {
                 return null; 
             }
+
+#if WINDOWS_UAP
+            // See if one of the reader names contains a -CL
+            if (devices.Count > 1 && selector == null)
+            {
+                var di = devices.SingleOrDefault(d => d.Id.Contains("-CL"));
+                if (di != null)
+                    return await SmartCardReader.FromIdAsync(di.Id);
+            }
+#endif
 
             var func = selector ?? (d => d.First());
             var dev = func(devices);

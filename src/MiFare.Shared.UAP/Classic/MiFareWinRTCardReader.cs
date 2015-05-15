@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using MiFare.PcSc;
@@ -49,7 +50,15 @@ namespace MiFare.Classic
         {
             if (disposing)
             {
-                connection?.Dispose();
+                try
+                {
+                    connection?.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                }
+                
                 connection = null;
             }
 
