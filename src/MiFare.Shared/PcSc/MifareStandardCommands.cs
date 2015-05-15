@@ -76,12 +76,24 @@ namespace MiFare.PcSc.MiFareStandard
         // TODO: retest non-volatile load on Win10 Mobile
 
         public LoadKey(byte[] mifareKey, byte keySlotNumber)
-#if WINDOWS_APP || WINDOWS_UAP
-            : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.NonVolatile, keySlotNumber, mifareKey)
-#else
-             : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, LoadKeysStorageType.Volatile, keySlotNumber, mifareKey)
-#endif
+            : base(LoadKeysKeyType.CardKey, null, LoadKeysTransmissionType.Plain, GetLoadKeysType(), keySlotNumber, mifareKey)
+
         {
+        }
+
+        private static LoadKeysStorageType GetLoadKeysType()
+        {
+#if WINDOWS_APP
+            return LoadKeysStorageType.NonVolatile;
+#elif WINDOWS_UAP
+            // For phone we need to use Volatile, for desktop NV
+            if(Windows.Foundation.Metadata.ApiInformation.IsApiContractPresent("Windows.Phone.PhoneContract", 1))
+                return LoadKeysStorageType.Volatile;
+
+            return LoadKeysStorageType.NonVolatile;
+#else
+            return LoadKeysStorageType.Volatile;
+#endif
         }
     }
     /// <summary>

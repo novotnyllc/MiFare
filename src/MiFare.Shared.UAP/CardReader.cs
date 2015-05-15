@@ -21,7 +21,14 @@ namespace MiFare
             if (!ApiInformation.IsTypePresent(typeof(SmartCardConnection).FullName))
                 return null;
 #endif
+
             var devices = await DeviceInformation.FindAllAsync(SmartCardReader.GetDeviceSelector(SmartCardReaderKind.Nfc));
+
+// if none, fall back to generic
+            if (devices.Count == 0)
+            {
+                devices = await DeviceInformation.FindAllAsync(SmartCardReader.GetDeviceSelector(SmartCardReaderKind.Generic));
+            }
 
             // There is a bug on some devices that were updated to WP8.1 where an NFC SmartCardReader is
             // enumerated despite that the device does not support it. As a workaround, we can do an additonal check

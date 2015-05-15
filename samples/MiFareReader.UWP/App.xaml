@@ -1,7 +1,8 @@
 ﻿<Application
-    x:Class="MiFareReader.UAP.App"
+    x:Class="MiFareReader.UWP.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MiFareReader.UAP">
+    xmlns:local="using:MiFareReader.UWP"
+    RequestedTheme="Light">
 
 </Application>

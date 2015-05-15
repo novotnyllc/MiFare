@@ -7,20 +7,20 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="aa34abcc-a6b2-4c71-a1d8-bc2bc36302b7"
+    Name="c55445bd-eb23-4c61-8e76-512d170dc9e4"
     Publisher="CN=Oren"
     Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="aa34abcc-a6b2-4c71-a1d8-bc2bc36302b7" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="c55445bd-eb23-4c61-8e76-512d170dc9e4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>MiFareReader.UAP</DisplayName>
+    <DisplayName>MiFareReader.UWP</DisplayName>
     <PublisherDisplayName>Oren</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
-    <TargetPlatform Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
   </Dependencies>
 
   <Resources>
@@ -30,13 +30,12 @@
   <Applications>
     <Application Id="App"
       Executable="$targetnametoken$.exe"
-      EntryPoint="MiFareReader.UAP.App">
+      EntryPoint="MiFareReader.UWP.App">
       <uap:VisualElements
-        DisplayName="MiFareReader.UAP"
+        DisplayName="MiFareReader.UWP"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
-        Description="MiFareReader.UAP"
-        ForegroundText="light"
+        Description="MiFareReader.UWP"
         BackgroundColor="#464646">
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
@@ -44,7 +43,7 @@
   </Applications>
 
   <Capabilities>
-    <Capability Name="internetClient" />
     <uap:Capability Name="sharedUserCertificates" />
+    <DeviceCapability Name="proximity" />
   </Capabilities>
 </Package>
