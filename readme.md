@@ -1,19 +1,13 @@
 # MiFare RT
-A MiFare Classic library for Windows Phone 8.1, Windows Store 8.1 and Desktop apps
+A MiFare Classic library for UWP and Desktop apps
 
 ## Hardware requirements
 
-### Phone
-You must have a Lumia 830 or newer device. Older devices do not have the chipset support for the low-level APDU access this library needs. This will not work on a Lumia 930 or any previous hardware, even after updating to 8.1.
 
-This library contains a detection routine to determine if a device's NFC reader has a supported chipset.
+### UWP 10.0.16299
+This will work in a UWP app
 
-You must enable the Proximity Capability and NFC Requirement.
-
-### Windows Store 8.1
-This will work in a Windows Store 8.1 app that is meant for enterprise distribution. It will not pass Store validation as it uses unsupported Win32 API calls (WinSCard.dll).
-
-You must enable the Shared User Certificates capability to use this library. [I'm not totally sure why this particular capability controls access to WinSCard, but without it you get UnauthorizedAccess exceptions coming from the AppContainer.]
+You must enable the Proximity and Shared User Certificates capability to use this library. 
 
 ### Desktop
 No special requirements.
