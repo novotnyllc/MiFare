@@ -1,47 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
-
-  <Identity
-    Name="c55445bd-eb23-4c61-8e76-512d170dc9e4"
-    Publisher="CN=Oren"
-    Version="1.0.0.0" />
-
-  <mp:PhoneIdentity PhoneProductId="c55445bd-eb23-4c61-8e76-512d170dc9e4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+  <Identity Name="c55445bd-eb23-4c61-8e76-512d170dc9e4" Publisher="CN=oren" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="c55445bd-eb23-4c61-8e76-512d170dc9e4" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>MiFareReader.UWP</DisplayName>
     <PublisherDisplayName>Oren</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
   </Dependencies>
-
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="MiFareReader.UWP.App">
-      <uap:VisualElements
-        DisplayName="MiFareReader.UWP"
-        Square150x150Logo="Assets\Logo.png"
-        Square44x44Logo="Assets\SmallLogo.png"
-        Description="MiFareReader.UWP"
-        BackgroundColor="#464646">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="MiFareReader.UWP.App">
+      <uap:VisualElements DisplayName="MiFareReader.UWP" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="MiFareReader.UWP" BackgroundColor="#464646">
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
-
   <Capabilities>
     <uap:Capability Name="sharedUserCertificates" />
     <DeviceCapability Name="proximity" />
