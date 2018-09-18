@@ -17,7 +17,7 @@ bld/
 [Oo]bj/
 
 # Roslyn cache directories
-*.ide/
+*.vs/
 
 *.nupkg
 

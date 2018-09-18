@@ -94,9 +94,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MiFare.Desktop\MiFare.Desktop.csproj">
-      <Project>{6939008f-7403-484c-82b2-799acaf3417c}</Project>
-      <Name>MiFare.Desktop</Name>
+    <ProjectReference Include="..\..\src\MiFare\MiFare.csproj">
+      <Project>{3ac4c50e-97ee-49c5-8b74-1bf9dbc9d21b}</Project>
+      <Name>MiFare</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

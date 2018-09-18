@@ -171,7 +171,7 @@ namespace MiFareReader.Desktop
         /// Display message via dialogue box
         /// </summary>
         /// <returns>None</returns>
-        public async void PopupMessage(string message)
+        public void PopupMessage(string message)
         {
             var ignored = this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (Action)(() =>
             {

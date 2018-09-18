@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.SmartCards;
 using Windows.Foundation;
@@ -40,6 +39,17 @@ namespace MiFareReader.UWP
             Application.Current.UnhandledException += Current_UnhandledException;
 
             GetDevices();
+        }
+
+        private void Current_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            string message = e.Exception.Message;
+            if (e.Exception.InnerException != null)
+            {
+                message += Environment.NewLine + e.Exception.InnerException.Message;
+            }
+
+            PopupMessage(message);
         }
 
 
@@ -192,17 +202,7 @@ namespace MiFareReader.UWP
                 await dlg.ShowAsync();
             });
         }
-
-        private void Current_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            string message = e.Exception.Message;
-            if (e.Exception.InnerException != null)
-            {
-                message += Environment.NewLine + e.Exception.InnerException.Message;
-            }
-
-            PopupMessage(message);
-        }
+        
         /// <summary>
         /// Capture any unobserved exception
         /// </summary>
