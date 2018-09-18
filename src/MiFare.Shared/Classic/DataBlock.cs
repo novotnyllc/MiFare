@@ -44,6 +44,6 @@ namespace MiFare.Classic
 
         public bool IsTrailer { get; }
 
-        public bool IsChanged => (!data.Equals(origData));
+        public bool IsChanged => (!data.SequenceEqual(origData));
     }
 }
