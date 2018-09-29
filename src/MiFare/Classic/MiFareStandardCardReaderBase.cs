@@ -24,7 +24,7 @@ namespace MiFare.Classic
 
         private byte nextKeySlot;
 
-        private Dictionary<byte[], byte> keyToLocationMap = new Dictionary<byte[], byte>(KeyEqualityComparer.Default);
+        private  static Dictionary<byte[], byte> keyToLocationMap = new Dictionary<byte[], byte>(KeyEqualityComparer.Default);
 
         protected MiFareStandardCardReaderBase(IReadOnlyCollection<SectorKeySet> keys)
         {
@@ -102,6 +102,33 @@ namespace MiFare.Classic
 
                 // Load the key to the location
                 var r = await TransceiveAsync(new LoadKey(keyToUse, location));
+                if (!r.Succeeded)
+                    return false; // could not load the key
+            }
+
+            var res = await TransceiveAsync(new PcSc.MiFareStandard.GeneralAuthenticate(blockNumber, location, gaKeyType));
+
+            return res.Succeeded;
+        }
+
+        public async Task<bool> TestLogin(int sector, KeyType keytype, byte[] key)
+        {
+            //for testing we ignore the keymap
+            var gaKeyType = (GeneralAuthenticate.GeneralAuthenticateKeyType)keytype;
+
+            // Get the block for the sector
+            var blockNumber = SectorToBlock(sector, 0);
+
+            // see if we have the key loaded already
+            byte location;
+            if (!keyToLocationMap.TryGetValue(key, out location))
+            {
+                location = nextKeySlot;
+                nextKeySlot++;
+                keyToLocationMap[key] = location;
+
+                // Load the key to the location
+                var r = await TransceiveAsync(new LoadKey(key, location));
                 if (!r.Succeeded)
                     return false; // could not load the key
             }
