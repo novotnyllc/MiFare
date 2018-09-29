@@ -231,6 +231,20 @@ namespace MiFare.Classic
             }
         }
 
+
+
+        /// <summary>
+        /// Tests if login into the given sector using the given key is possible
+        /// </summary>
+        /// <param name="sector">sector to login into</param>
+        /// <param name="keytype">keytype to use (e.g. KeyA, KeyB)</param>
+        /// <param name="key">key to use</param>
+        /// <returns>tru on success, false otherwise</returns>
+        public async Task<bool> TestLogin(int sector, KeyType keytype, byte[] key)
+        {
+            return await GetSector(sector).TestLogin(keytype, key);
+        }
+
         /// <summary>
         ///     reinitialize the object
         /// </summary>

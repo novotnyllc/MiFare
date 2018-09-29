@@ -205,6 +205,11 @@ namespace MiFare.Classic
                 throw new CardWriteException($"Unable to write in sector {sector}, block {dataBlock.Number}");
         }
 
+        public async Task<bool> TestLogin(KeyType keytype, byte[] key)
+        {
+            return await card.Reader.TestLogin(sector, keytype, key);
+        }
+
         private async Task<DataBlock> GetDataBlockInt(int block)
         {
             var db = dataBlocks[block];
