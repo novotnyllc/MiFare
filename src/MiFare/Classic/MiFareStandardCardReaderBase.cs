@@ -22,7 +22,7 @@ namespace MiFare.Classic
        
         private Dictionary<SectorKey, byte[]> keyMap = new Dictionary<SectorKey, byte[]>();
 
-        private byte nextKeySlot;
+        private static byte nextKeySlot;
 
         private  static Dictionary<byte[], byte> keyToLocationMap = new Dictionary<byte[], byte>(KeyEqualityComparer.Default);
 
