@@ -11,7 +11,7 @@ namespace MiFare.Classic
     /// <summary>
     ///     Internal class for encoding/decoding the 4 control bytes in the trailer datablock of each sector
     /// </summary>
-    internal class AccessBits
+    public class AccessBits
     {
         /// <summary>
         ///     Calculate the 4 control bytes in the trailer datablock of each sector according to the given AccessConditions
