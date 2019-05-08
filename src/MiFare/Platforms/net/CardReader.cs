@@ -25,7 +25,7 @@ namespace MiFare
                 var names = GetReaderNames();
                 if (names.Count == 0)
                 {
-                    return null;
+                    return Task.FromResult<SmartCardReader>(null);
                 }
                 if (names.Count > 1)
                 {
