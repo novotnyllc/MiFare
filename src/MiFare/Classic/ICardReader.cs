@@ -19,6 +19,7 @@ namespace MiFare.Classic
     {
         KeyA = GeneralAuthenticate.GeneralAuthenticateKeyType.MifareKeyA,
         KeyB = GeneralAuthenticate.GeneralAuthenticateKeyType.PicoTagPassKeyB,
+        KeyAOrB,
         KeyDefaultF
     }
 

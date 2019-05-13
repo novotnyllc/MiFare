@@ -41,6 +41,18 @@ namespace MiFare.Classic
 
                 return access;
             }
+            set
+            {
+                access = value;
+                if (originalAccessConditions == null)
+                {
+                    var data = GetData(TrailerBlockIndex)
+                        .Result;
+                    // Store a copy for determining write key for later
+                    originalAccessConditions = AccessBits.GetAccessConditions(data);
+
+                }
+            }
         }
 
         /// <summary>
@@ -195,9 +207,7 @@ namespace MiFare.Classic
             if (card.ActiveSector != sector)
             {
                 var writeKey = GetWriteKey(dataBlock.Number);
-                if (!await card.Reader.Login(sector, writeKey))
-                    throw new CardLoginException($"Unable to login in sector {sector} with key {writeKey}");
-
+                await TryLogin(writeKey);
                 card.ActiveSector = sector;
             }
 
@@ -242,7 +252,19 @@ namespace MiFare.Classic
             if (Access == null)
                 return InternalKeyType.KeyDefaultF;
 
-            return (originalAccessConditions.Trailer.AccessBitsWrite == TrailerAccessCondition.ConditionEnum.KeyA) ? InternalKeyType.KeyA : InternalKeyType.KeyB;
+            switch (originalAccessConditions.Trailer.AccessBitsWrite)
+            {
+                case TrailerAccessCondition.ConditionEnum.Never:
+                    throw new CardWriteException($"Write in trailer block of sector {sector} is not allowed");
+                case TrailerAccessCondition.ConditionEnum.KeyA:
+                    return InternalKeyType.KeyA;
+                case TrailerAccessCondition.ConditionEnum.KeyB:
+                    return InternalKeyType.KeyB;
+                case TrailerAccessCondition.ConditionEnum.KeyAOrB:
+                    return InternalKeyType.KeyAOrB;
+                default:
+                    return InternalKeyType.KeyDefaultF;
+            }
         }
 
         private InternalKeyType GetWriteKey(int datablock)
@@ -253,7 +275,36 @@ namespace MiFare.Classic
             if (datablock == TrailerBlockIndex)
                 return GetTrailerWriteKey();
 
-            return (originalAccessConditions.DataAreas[Math.Min(datablock, Access.DataAreas.Length - 1)].Write == DataAreaAccessCondition.ConditionEnum.KeyA) ? InternalKeyType.KeyA : InternalKeyType.KeyB;
+            switch (originalAccessConditions.DataAreas[Math.Min(datablock, Access.DataAreas.Length - 1)].Write)
+            {
+                case DataAreaAccessCondition.ConditionEnum.Never:
+                    throw new CardWriteException($"Write in sector {sector}, block {datablock} is not allowed");
+                case DataAreaAccessCondition.ConditionEnum.KeyA:
+                    return InternalKeyType.KeyA;
+                case DataAreaAccessCondition.ConditionEnum.KeyB:
+                    return InternalKeyType.KeyB;
+                case DataAreaAccessCondition.ConditionEnum.KeyAOrB:
+                    return InternalKeyType.KeyAOrB;
+                default:
+                    return InternalKeyType.KeyDefaultF;
+            }
+        }
+
+        private async Task TryLogin(InternalKeyType writeKey)
+        {
+            if (writeKey == InternalKeyType.KeyAOrB)
+            {
+                if (!await card.Reader.Login(sector, InternalKeyType.KeyA) &&
+                    !await card.Reader.Login(sector, InternalKeyType.KeyB))
+                {
+                    throw new CardLoginException($"Unable to login in sector {sector} with key A or B");
+                }
+            }
+            else
+            {
+                if (!await card.Reader.Login(sector, writeKey))
+                    throw new CardLoginException($"Unable to login in sector {sector} with the key {writeKey} required to write");
+            }
         }
     }
 }

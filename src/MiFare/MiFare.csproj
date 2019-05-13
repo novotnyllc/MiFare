@@ -24,6 +24,13 @@
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="All" />
   </ItemGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
+    <DefineConstants>WINDOWS_APP</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+    <DefineConstants>WINDOWS_UAP</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs" />

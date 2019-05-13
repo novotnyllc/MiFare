@@ -99,7 +99,7 @@ namespace MiFare.Classic
 
             Byte crc = CalculateCRC();
             if (_Block1[0] != crc)
-                crc = _Block1[0];
+                _Block1[0] = crc;
         }
         #endregion
 

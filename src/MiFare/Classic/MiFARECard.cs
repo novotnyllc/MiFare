@@ -256,7 +256,7 @@ namespace MiFare.Classic
             Initialize();
         }
 
-        private async Task InitMad()
+        public async Task InitMad()
         {
             if (mad != null)
                 return;
