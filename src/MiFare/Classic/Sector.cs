@@ -303,7 +303,7 @@ namespace MiFare.Classic
             else
             {
                 if (!await card.Reader.Login(sector, writeKey))
-                    throw new CardLoginException($"Unable to login in sector {sector} with key {writeKey}");
+                    throw new CardLoginException($"Unable to login in sector {sector} with the key {writeKey} required to write");
             }
         }
     }
